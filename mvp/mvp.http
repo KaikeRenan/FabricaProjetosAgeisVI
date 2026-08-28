@@ -1,0 +1,6 @@
+@mvp_HostAddress = http://localhost:5080
+
+GET {{mvp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
