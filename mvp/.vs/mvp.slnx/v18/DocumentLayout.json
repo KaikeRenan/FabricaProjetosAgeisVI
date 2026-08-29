@@ -1,7 +1,36 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\mvp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:mvp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\data\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:data\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\exceptions\\baseexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:exceptions\\baseexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\interfaces\\irepositories\\ibaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:interfaces\\irepositories\\ibaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|c:\\dev\\fabricaprojetoageisvi\\mvp\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89C2294-E2B0-5CFE-3997-980FAEAD6F7B}|mvp.csproj|solutionrelative:repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +38,96 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "mvp.csproj",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\mvp.csproj",
+              "RelativeDocumentMoniker": "mvp.csproj",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\mvp.csproj",
+              "RelativeToolTip": "mvp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-08-29T02:12:59.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Context.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Data\\Context.cs",
+              "RelativeDocumentMoniker": "Data\\Context.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Data\\Context.cs",
+              "RelativeToolTip": "Data\\Context.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:49.465Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BaseEntity.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Entities\\BaseEntity.cs",
+              "RelativeDocumentMoniker": "Entities\\BaseEntity.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Entities\\BaseEntity.cs",
+              "RelativeToolTip": "Entities\\BaseEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:47.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BaseException.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Exceptions\\BaseException.cs",
+              "RelativeDocumentMoniker": "Exceptions\\BaseException.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Exceptions\\BaseException.cs",
+              "RelativeToolTip": "Exceptions\\BaseException.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:46.439Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IBaseRepository.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Interfaces\\IRepositories\\IBaseRepository.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IRepositories\\IBaseRepository.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Interfaces\\IRepositories\\IBaseRepository.cs",
+              "RelativeToolTip": "Interfaces\\IRepositories\\IBaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:44.121Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:41.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Repositories\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\BaseRepository.cs",
+              "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\Repositories\\BaseRepository.cs",
+              "RelativeToolTip": "Repositories\\BaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:12:40.071Z"
             }
           ]
         }
