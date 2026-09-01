@@ -1,8 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using mvp.Data;
+using mvp.Interfaces.IRepositories;
+using mvp.Interfaces.IServices;
+using mvp.Repositories;
+using mvp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+//builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -15,8 +25,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 

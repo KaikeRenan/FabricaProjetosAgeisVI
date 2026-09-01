@@ -47,12 +47,12 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "mvp",
+              "Title": "mvp.csproj",
               "DocumentMoniker": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\mvp.csproj",
               "RelativeDocumentMoniker": "mvp.csproj",
               "ToolTip": "C:\\dev\\FabricaProjetoAgeisVI\\mvp\\mvp.csproj",
               "RelativeToolTip": "mvp.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-08-29T02:12:59.906Z",
               "EditorCaption": ""
@@ -67,8 +67,7 @@
               "RelativeToolTip": "Data\\Context.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:49.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:49.465Z"
             },
             {
               "$type": "Document",
@@ -80,8 +79,7 @@
               "RelativeToolTip": "Entities\\BaseEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:47.926Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:47.926Z"
             },
             {
               "$type": "Document",
@@ -93,8 +91,7 @@
               "RelativeToolTip": "Exceptions\\BaseException.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:46.439Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:46.439Z"
             },
             {
               "$type": "Document",
@@ -106,8 +103,7 @@
               "RelativeToolTip": "Interfaces\\IRepositories\\IBaseRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:44.121Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:44.121Z"
             },
             {
               "$type": "Document",
@@ -119,8 +115,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:41.239Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:41.239Z"
             },
             {
               "$type": "Document",
@@ -132,8 +127,7 @@
               "RelativeToolTip": "Repositories\\BaseRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:12:40.071Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-29T02:12:40.071Z"
             }
           ]
         }
