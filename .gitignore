@@ -56,3 +56,6 @@ nunit-*.xml
 # AppSettings
 appsettings.json
 appsettings.Development.json
+
+#Binaries
+.vs/
