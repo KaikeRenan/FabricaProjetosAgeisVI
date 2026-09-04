@@ -18,7 +18,7 @@ namespace mvp.Entities
             phoneNumber = null;
         }
 
-        public User(Name name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
+        public Pharmacy(Name name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
         {
             this.name = name;
             this.address = address;
