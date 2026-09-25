@@ -4,34 +4,34 @@ namespace mvp.Entities
 {
     public class Pharmacy : BaseEntity
     {
-        public Name name {get; private set; }
-        public Address address { get; private set; }
-        public CNPJ cnpj {get; private set; }
-        public PhoneNumber phoneNumber {get; private set;}
+        public string Name { get; private set; }
+        public Address Address { get; private set; }
+        public CNPJ CNPJ { get; private set; }
+        public PhoneNumber PhoneNumber { get; private set; }
         //Futuramente adicionar a chave estrangeira de Estoque
 
         protected Pharmacy()
         {
-            name = null!;
-            address = null!;
-            cnpj = null;
-            phoneNumber = null;
+            Name = null!;
+            Address = null!;
+            CNPJ = null!;
+            PhoneNumber = null!;
         }
 
-        public Pharmacy(Name name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
+        public Pharmacy(string name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
         {
-            this.name = name;
-            this.address = address;
-            this.cnpj = cnpj;
-            this.phoneNumber = phoneNumber;
+            this.Name = name;
+            this.Address = address;
+            this.CNPJ = cnpj;
+            this.PhoneNumber = phoneNumber;
         }
 
-        public void Update(Name name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
+        public void Update(string name, Address address, CNPJ cnpj, PhoneNumber phoneNumber)
         {
-            this.name = name;
-            this.address = address;
-            this.cnpj = cnpj;
-            this.phoneNumber = phoneNumber;
+            this.Name = name;
+            this.Address = address;
+            this.CNPJ = cnpj;
+            this.PhoneNumber = phoneNumber;
 
             UpdateTimestamps();
         }
