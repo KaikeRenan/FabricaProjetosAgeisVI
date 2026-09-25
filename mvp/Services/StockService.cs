@@ -24,8 +24,7 @@ namespace mvp.Services
                 Id = s.Id,
                 PharmacyId = s.PharmacyId,
                 HealthUnitId = s.HealthUnitId,
-                MedicineName = s.MedicineName,
-                Dosage = s.Dosage,
+                BatchId = s.BatchId,
                 Quantity = s.Quantity,
             }).ToList();
         }
@@ -42,15 +41,14 @@ namespace mvp.Services
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
                 HealthUnitId = stock.HealthUnitId,
-                MedicineName = stock.MedicineName,
-                Dosage = stock.Dosage,
+                BatchId = stock.BatchId,
                 Quantity = stock.Quantity,
             };
         }
 
         public async Task<StockResponseDTO> CreateAsync(StockCreateDTO dto)
         {
-            var stock = new Stock(dto.PharmacyId, dto.HealthUnitId, dto.MedicineName, dto.Dosage, dto.Quantity);
+            var stock = new Stock(dto.PharmacyId, dto.HealthUnitId, dto.BatchId, dto.Quantity);
 
             await _stockRepository.CreateAsync(stock);
 
@@ -59,8 +57,7 @@ namespace mvp.Services
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
                 HealthUnitId = stock.HealthUnitId,
-                MedicineName = stock.MedicineName,
-                Dosage = stock.Dosage,
+                BatchId = stock.BatchId,
                 Quantity = stock.Quantity,
             };
         }
@@ -72,7 +69,7 @@ namespace mvp.Services
             if (stock == null)
                 throw new StockNotFoundException();
 
-            stock.Update(dto.PharmacyId, dto.HealthUnitId, dto.MedicineName, dto.Dosage, dto.Quantity);
+            stock.Update(dto.PharmacyId, dto.HealthUnitId, dto.BatchId, dto.Quantity);
 
             await _stockRepository.UpdateAsync(stock);
 
@@ -81,8 +78,7 @@ namespace mvp.Services
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
                 HealthUnitId = stock.HealthUnitId,
-                MedicineName = stock.MedicineName,
-                Dosage = stock.Dosage,
+                BatchId = stock.BatchId,
                 Quantity = stock.Quantity,
             };
         }

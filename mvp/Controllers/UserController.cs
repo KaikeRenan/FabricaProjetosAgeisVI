@@ -2,6 +2,7 @@
 using mvp.DTOs;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
+using mvp.ValueObjects;
 
 namespace mvp.Controllers
 {
@@ -27,10 +28,6 @@ namespace mvp.Controllers
         public async Task<IActionResult> GetById(Guid Id)
         {
             var user = await _userService.GetByIdAsync(Id);
-
-            if (user == null)
-                throw new UserNotFoundException();
-
             return Ok(user);
         }
 
@@ -67,6 +64,13 @@ namespace mvp.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetByEmail(string email)
+        {
+            var user = await _userService.GetByEmailAsync(email);
+            return Ok(user);
         }
     }
 }
