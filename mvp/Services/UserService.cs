@@ -27,7 +27,7 @@ namespace mvp.Services
             }).ToList();
         }
 
-        public async Task<UserResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<UserResponseDTO> GetByIdAsync(Guid Id)
         {
             var user = await _userRepository.GetByIdAsync(Id);
 
@@ -86,6 +86,20 @@ namespace mvp.Services
                 throw new UserNotFoundException();
 
             await _userRepository.DeleteAsync(user);
+        }
+
+        public async Task<UserResponseDTO> GetByEmailAsync(string email)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            return new UserResponseDTO
+            {
+                Id = user.Id,
+                Email = user.Email.Value
+            };
         }
     }
 }

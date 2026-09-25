@@ -9,5 +9,10 @@ namespace mvp.Repositories
         public UserRepository(Context context) : base(context)
         {
         }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return _dbSet.FirstOrDefault(x => x.Email.Value == email);
+        }
     }
 }
