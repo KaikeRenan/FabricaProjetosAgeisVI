@@ -2,20 +2,20 @@ using mvp.ValueObjects;
 
 namespace mvp.Entities
 {
-    public class HealthPost : BaseEntity
+    public class HealthUnit : BaseEntity
     {
         public string Name { get; private set; }
         public Address Address { get; private set; }
         public CNES CNES { get; private set; }
 
-        protected HealthPost()
+        protected HealthUnit()
         {
             Name = null!;
             Address = null!;
             CNES = null!;
         }
 
-        public HealthPost(string name, Address address, CNES cnes)
+        public HealthUnit(string name, Address address, CNES cnes)
         {
             this.Name = name;
             this.Address = address;

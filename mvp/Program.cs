@@ -12,8 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IHealthPostService, HealthPostService>();
-builder.Services.AddScoped<IHealthPostRepository, HealthPostRepository>();
+builder.Services.AddScoped<IHealthUnittService, HealthUnitService>();
+builder.Services.AddScoped<IHealthUnitRepository, HealthUnitRepository>();
 
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();

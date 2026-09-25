@@ -23,7 +23,7 @@ namespace mvp.Services
             {
                 Id = s.Id,
                 PharmacyId = s.PharmacyId,
-                HealthPostId = s.HealthPostId,
+                HealthUnitId = s.HealthUnitId,
                 MedicineName = s.MedicineName,
                 Dosage = s.Dosage,
                 Quantity = s.Quantity,
@@ -41,7 +41,7 @@ namespace mvp.Services
             {
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
-                HealthPostId = stock.HealthPostId,
+                HealthUnitId = stock.HealthUnitId,
                 MedicineName = stock.MedicineName,
                 Dosage = stock.Dosage,
                 Quantity = stock.Quantity,
@@ -50,7 +50,7 @@ namespace mvp.Services
 
         public async Task<StockResponseDTO> CreateAsync(StockCreateDTO dto)
         {
-            var stock = new Stock(dto.PharmacyId, dto.HealthPostId, dto.MedicineName, dto.Dosage, dto.Quantity);
+            var stock = new Stock(dto.PharmacyId, dto.HealthUnitId, dto.MedicineName, dto.Dosage, dto.Quantity);
 
             await _stockRepository.CreateAsync(stock);
 
@@ -58,7 +58,7 @@ namespace mvp.Services
             {
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
-                HealthPostId = stock.HealthPostId,
+                HealthUnitId = stock.HealthUnitId,
                 MedicineName = stock.MedicineName,
                 Dosage = stock.Dosage,
                 Quantity = stock.Quantity,
@@ -72,7 +72,7 @@ namespace mvp.Services
             if (stock == null)
                 throw new StockNotFoundException();
 
-            stock.Update(dto.PharmacyId, dto.HealthPostId, dto.MedicineName, dto.Dosage, dto.Quantity);
+            stock.Update(dto.PharmacyId, dto.HealthUnitId, dto.MedicineName, dto.Dosage, dto.Quantity);
 
             await _stockRepository.UpdateAsync(stock);
 
@@ -80,7 +80,7 @@ namespace mvp.Services
             {
                 Id = stock.Id,
                 PharmacyId = stock.PharmacyId,
-                HealthPostId = stock.HealthPostId,
+                HealthUnitId = stock.HealthUnitId,
                 MedicineName = stock.MedicineName,
                 Dosage = stock.Dosage,
                 Quantity = stock.Quantity,

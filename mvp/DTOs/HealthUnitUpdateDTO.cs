@@ -1,6 +1,6 @@
 namespace mvp.DTOs
 {
-    public class HealthPostCreateDTO
+    public class HealthUnitUpdateDTO
     {
         public string Name { get; set; } = null!;
         public string Street { get; set; } = null!;
@@ -9,5 +9,6 @@ namespace mvp.DTOs
         public string ZipCode { get; set; } = null!;
         public string Zone { get; set; } = null!;
         public string CNES { get; set; } = null!;
+
     }
 }

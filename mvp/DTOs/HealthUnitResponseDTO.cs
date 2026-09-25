@@ -1,6 +1,6 @@
 namespace mvp.DTOs
 {
-    public class HealthPostResponseDTO
+    public class HealthUnitResponseDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
