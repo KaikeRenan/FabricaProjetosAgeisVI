@@ -7,7 +7,7 @@ using mvp.ValueObjects;
 
 namespace mvp.Services
 {
-    public class HealthUnitService : IHealthUnittService
+    public class HealthUnitService : IHealthUnitService
     {
         private readonly IHealthUnitRepository _healthUnitRepository;
 

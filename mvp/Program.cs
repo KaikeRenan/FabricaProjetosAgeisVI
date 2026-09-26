@@ -29,11 +29,14 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IHealthUnittService, HealthUnitService>();
+builder.Services.AddScoped<IHealthUnitService, HealthUnitService>();
 builder.Services.AddScoped<IHealthUnitRepository, HealthUnitRepository>();
 
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+
+builder.Services.AddScoped<IMedicineService, MedicineService>();
+builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
