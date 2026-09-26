@@ -6,7 +6,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/stocks")]
     public class StockController : ControllerBase
     {
         private readonly IStockService _stockService;
