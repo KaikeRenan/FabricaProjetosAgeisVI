@@ -349,7 +349,16 @@ namespace mvp.Data
                     .HasColumnName("id");
 
                 entity.Property(s => s.StockId)
-                    .HasColumnName("stock_id");
+                    .HasColumnName("stock_id")
+                    .IsRequired();
+
+                entity.Property(s => s.BatchId)
+                    .HasColumnName("batch_id")
+                    .IsRequired();
+
+                entity.Property(s => s.MedicineId)
+                    .HasColumnName("medicine_id")
+                    .IsRequired();
 
                 entity.Property(s => s.Type)
                     .HasColumnName("type")
@@ -363,7 +372,17 @@ namespace mvp.Data
                 entity.HasOne<Stock>()
                     .WithMany()
                     .HasForeignKey(s => s.StockId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Batch>()
+                    .WithMany()
+                    .HasForeignKey(s => s.BatchId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Medicine>()
+                    .WithMany()
+                    .HasForeignKey(s => s.MedicineId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.Property(s => s.CreatedAt)
                     .HasColumnName("created_at")
