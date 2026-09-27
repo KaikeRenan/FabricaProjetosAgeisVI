@@ -219,7 +219,8 @@ namespace mvp.Data
                     .HasColumnName("id");
 
                 entity.Property(b => b.MedicineId)
-                    .HasColumnName("medicine_id");
+                    .HasColumnName("medicine_id")
+                    .IsRequired();
 
                 entity.Property(b => b.BatchNumber)
                     .HasColumnName("batch_number")
@@ -236,7 +237,7 @@ namespace mvp.Data
                 entity.HasOne<Medicine>()
                     .WithMany()
                     .HasForeignKey(b => b.MedicineId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.Property(b => b.CreatedAt)
                     .HasColumnName("created_at")
