@@ -38,6 +38,15 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 
+builder.Services.AddScoped<IStockMovementService, StockMovementService>();
+builder.Services.AddScoped<IStockMovementRepository, StockMovementRepository>();
+
+builder.Services.AddScoped<IBatchService, BatchService>();
+builder.Services.AddScoped<IBatchRepository, BatchRepository>();
+
+builder.Services.AddScoped<IExpirationAlertService, ExpirationAlertService>();
+builder.Services.AddScoped<IExpirationAlertRepository, ExpirationAlertRepository>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
