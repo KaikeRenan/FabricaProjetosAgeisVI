@@ -1,6 +1,6 @@
 namespace mvp.Exceptions
 {
-    public class HealthUnitNotFoundException : Exception
+    public class HealthUnitNotFoundException : BaseException
     {
         public HealthUnitNotFoundException() : base("Unidade de Saúde não encontrado")
         {

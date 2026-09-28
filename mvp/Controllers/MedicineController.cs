@@ -2,6 +2,7 @@
 using mvp.DTOs.Medicine;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
+using mvp.Services;
 
 namespace mvp.Controllers
 {
@@ -26,14 +27,15 @@ namespace mvp.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
-            var medicine = await _medicineService.GetByIdAsync(Id);
-
-            if (medicine == null)
+            try
             {
-                throw new MedicineNotFoundException();
+                var medicine = await _medicineService.GetByIdAsync(Id);
+                return Ok(medicine);
             }
-
-            return Ok(medicine);
+            catch (MedicineNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]

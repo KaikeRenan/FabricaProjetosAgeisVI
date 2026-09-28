@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using mvp.DTOs;
+using mvp.DTOs.User;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
-using mvp.ValueObjects;
 
 namespace mvp.Controllers
 {
@@ -27,8 +26,15 @@ namespace mvp.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
-            var user = await _userService.GetByIdAsync(Id);
-            return Ok(user);
+            try
+            {
+                var user = await _userService.GetByIdAsync(Id);
+                return Ok(user);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]

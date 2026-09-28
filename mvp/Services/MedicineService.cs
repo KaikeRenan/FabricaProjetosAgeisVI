@@ -39,7 +39,7 @@ namespace mvp.Services
             var medicine = await _medicineRepository.GetByIdAsync(id);
 
             if (medicine == null)
-                return null;
+                throw new MedicineNotFoundException();
 
             return Response(medicine);
         }

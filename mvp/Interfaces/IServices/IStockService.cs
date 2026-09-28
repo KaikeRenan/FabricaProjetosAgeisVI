@@ -1,4 +1,4 @@
-using mvp.DTOs;
+using mvp.DTOs.Stock;
 
 namespace mvp.Interfaces.IServices
 {

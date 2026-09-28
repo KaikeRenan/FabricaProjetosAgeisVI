@@ -39,7 +39,7 @@ namespace mvp.Services
             var batch = await _batchRepository.GetByIdAsync(Id);
 
             if (batch == null)
-                return null;
+                throw new BatchNotFoundException();
 
             return Response(batch);
         }

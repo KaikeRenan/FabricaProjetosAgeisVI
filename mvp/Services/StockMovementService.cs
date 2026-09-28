@@ -40,7 +40,7 @@ namespace mvp.Services
             var stockMovement = await _stockMovementRepository.GetByIdAsync(id);
 
             if (stockMovement == null)
-                return null;
+                throw new StockMovementNotFoundException();
 
             return Response(stockMovement);
         }
@@ -85,7 +85,7 @@ namespace mvp.Services
             var stockMovement = await _stockMovementRepository.GetByIdAsync(id);
 
             if (stockMovement == null)
-                throw new MedicineNotFoundException();
+                throw new StockMovementNotFoundException();
 
             await _stockMovementRepository.DeleteAsync(stockMovement);
         }

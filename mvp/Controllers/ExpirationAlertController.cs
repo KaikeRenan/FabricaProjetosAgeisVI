@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.ExpirationAlert;
-using mvp.Entities;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
 
@@ -30,10 +29,6 @@ namespace mvp.Controllers
             try
             {
                 var expirationAlert = await _expirationAlertService.GetByIdAsync(Id);
-
-                if (expirationAlert == null)
-                    throw new ExpirationAlertNotFoundException();
-
                 return Ok(expirationAlert);
             }
             catch (ExpirationAlertNotFoundException ex)
