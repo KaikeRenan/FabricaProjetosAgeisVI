@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using mvp.DTOs;
+using mvp.DTOs.User;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
 
 namespace mvp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -26,12 +26,15 @@ namespace mvp.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
-            var user = await _userService.GetByIdAsync(Id);
-
-            if (user == null)
-                throw new UserNotFoundException();
-
-            return Ok(user);
+            try
+            {
+                var user = await _userService.GetByIdAsync(Id);
+                return Ok(user);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -67,6 +70,13 @@ namespace mvp.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetByEmail(string email)
+        {
+            var user = await _userService.GetByEmailAsync(email);
+            return Ok(user);
         }
     }
 }

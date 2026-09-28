@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using mvp.DTOs;
+using mvp.DTOs.HealthUnit;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
 
 namespace mvp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/healthUnits")]
     public class HealthUnitController : ControllerBase
     {
-        private readonly IHealthUnittService _healthUnitService;
+        private readonly IHealthUnitService _healthUnitService;
 
-        public HealthUnitController(IHealthUnittService healthUnitService)
+        public HealthUnitController(IHealthUnitService healthUnitService)
         {
             _healthUnitService = healthUnitService;
         }
@@ -26,15 +26,15 @@ namespace mvp.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
-
-            var healthUnit = await _healthUnitService.GetByIdAsync(Id);
-
-            if (healthUnit == null)
+            try
             {
-                throw new HealthUnitNotFoundException();
+                var healthUnit = await _healthUnitService.GetByIdAsync(Id);
+                return Ok(healthUnit);
             }
-
-            return Ok(healthUnit);
+            catch (HealthUnitNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]

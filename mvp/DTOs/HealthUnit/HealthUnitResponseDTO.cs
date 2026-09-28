@@ -1,4 +1,4 @@
-namespace mvp.DTOs
+namespace mvp.DTOs.HealthUnit
 {
     public class HealthUnitResponseDTO
     {

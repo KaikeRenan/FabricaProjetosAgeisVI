@@ -1,4 +1,4 @@
-﻿namespace mvp.DTOs
+﻿namespace mvp.DTOs.User
 {
     public class UserUpdateDTO
     {

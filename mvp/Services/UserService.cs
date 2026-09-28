@@ -1,4 +1,4 @@
-﻿using mvp.DTOs;
+﻿using mvp.DTOs.User;
 using mvp.Entities;
 using mvp.Exceptions;
 using mvp.Interfaces.IRepositories;
@@ -16,29 +16,30 @@ namespace mvp.Services
             _userRepository = userRepository;
         }
 
+        private UserResponseDTO Response(User user)
+        {
+            return new UserResponseDTO
+            {
+                Id = user.Id,
+                Email = user.Email.Value
+            };
+        }
+
         public async Task<List<UserResponseDTO>> GetAllAsync()
         {
             var users = await _userRepository.GetAllAsync();
 
-            return users.Select(user => new UserResponseDTO
-            {
-                Id = user.Id,
-                Email = user.Email.Value
-            }).ToList();
+            return users.Select(Response).ToList();
         }
 
-        public async Task<UserResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<UserResponseDTO> GetByIdAsync(Guid Id)
         {
             var user = await _userRepository.GetByIdAsync(Id);
 
             if (user == null)
                 throw new UserNotFoundException();
 
-            return new UserResponseDTO
-            {
-                Id = user.Id,
-                Email = user.Email.Value
-            };
+            return Response(user);
         }
 
         public async Task<UserResponseDTO> CreateAsync(UserCreateDTO dto)
@@ -50,11 +51,7 @@ namespace mvp.Services
 
             await _userRepository.CreateAsync(user);
 
-            return new UserResponseDTO
-            {
-                Id = user.Id,
-                Email = user.Email.Value
-            };
+            return Response(user);
         }
 
         public async Task<UserResponseDTO> UpdateAsync(Guid Id, UserUpdateDTO dto)
@@ -71,11 +68,7 @@ namespace mvp.Services
 
             await _userRepository.UpdateAsync(user);
 
-            return new UserResponseDTO
-            {
-                Id = user.Id,
-                Email = user.Email.Value
-            };
+            return Response(user);
         }
 
         public async Task DeleteAsync(Guid Id)
@@ -86,6 +79,16 @@ namespace mvp.Services
                 throw new UserNotFoundException();
 
             await _userRepository.DeleteAsync(user);
+        }
+
+        public async Task<UserResponseDTO> GetByEmailAsync(string email)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            return Response(user);
         }
     }
 }

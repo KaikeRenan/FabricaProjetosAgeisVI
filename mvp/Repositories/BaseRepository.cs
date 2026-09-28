@@ -33,7 +33,6 @@ namespace mvp.Repositories
 
         public virtual async Task UpdateAsync(T entity)
         {
-            entity.UpdateTimestamps();
             await _dbContext.SaveChangesAsync();
         }
 

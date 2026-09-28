@@ -1,0 +1,10 @@
+﻿namespace mvp.DTOs.ExpirationAlert
+{
+    public class ExpirationAlertUpdateDTO
+    {
+        public Guid MedicineId { get; set; }
+        public Guid BatchId { get; set; }
+        public DateTime AlertDate { get; set; }
+        public bool Resolved { get; set; }
+    }
+}
