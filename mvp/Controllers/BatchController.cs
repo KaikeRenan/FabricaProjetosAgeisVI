@@ -29,10 +29,6 @@ namespace mvp.Controllers
             try
             {
                 var batch = await _batchService.GetByIdAsync(Id);
-
-                if (batch == null)
-                    throw new BatchNotFoundException();
-
                 return Ok(batch);
             }
             catch (BatchNotFoundException ex)

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.StockMovement;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
+using mvp.Services;
 
 namespace mvp.Controllers
 {
@@ -26,9 +27,15 @@ namespace mvp.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
-            var stockMovement = await _stockMovementService.GetByIdAsync(Id);
-            if (stockMovement == null) throw new StockMovementNotFoundException();
-            return Ok(stockMovement);
+            try
+            {
+                var stockMovement = await _stockMovementService.GetByIdAsync(Id);
+                return Ok(stockMovement);
+            }
+            catch (StockMovementNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -46,7 +53,10 @@ namespace mvp.Controllers
                 var stockMovement = await _stockMovementService.UpdateAsync(Id, dto);
                 return Ok(stockMovement);
             }
-            catch (StockMovementNotFoundException ex) { return NotFound(ex.Message); }
+            catch (StockMovementNotFoundException ex) 
+            { 
+                return NotFound(ex.Message); 
+            }
         }
 
         [HttpDelete("{Id}")]
@@ -57,7 +67,10 @@ namespace mvp.Controllers
                 await _stockMovementService.DeleteAsync(Id);
                 return NoContent();
             }
-            catch (StockMovementNotFoundException ex) { return NotFound(ex.Message); }
+            catch (StockMovementNotFoundException ex) 
+            { 
+                return NotFound(ex.Message); 
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-using mvp.DTOs;
+using mvp.DTOs.HealthUnit;
 
 namespace mvp.Interfaces.IServices
 {

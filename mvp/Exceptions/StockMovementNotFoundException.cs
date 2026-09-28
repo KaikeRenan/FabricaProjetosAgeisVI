@@ -1,6 +1,6 @@
 namespace mvp.Exceptions
 {
-    public class StockMovementNotFoundException : Exception
+    public class StockMovementNotFoundException : BaseException
     {
         public StockMovementNotFoundException() : base("Movimentação no estoque não encontrado")
         {

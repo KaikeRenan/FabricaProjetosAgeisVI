@@ -1,4 +1,4 @@
-﻿using mvp.DTOs;
+﻿using mvp.DTOs.User;
 using mvp.Entities;
 
 namespace mvp.Interfaces.IServices

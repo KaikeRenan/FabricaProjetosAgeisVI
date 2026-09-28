@@ -39,7 +39,7 @@ namespace mvp.Services
             var expirationAlert = await _expirationAlertRepository.GetByIdAsync(Id);
 
             if (expirationAlert == null)
-                return null;
+                throw new ExpirationAlertNotFoundException();
 
             return Response(expirationAlert);
         }

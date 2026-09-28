@@ -1,7 +1,8 @@
-namespace mvp.DTOs
+namespace mvp.DTOs.Stock
 {
-    public class StockCreateDTO
+    public class StockResponseDTO
     {
+        public Guid Id { get; set; }
         public Guid? PharmacyId { get; set; }
         public Guid? HealthUnitId { get; set; }
         public Guid? BatchId { get; set; }

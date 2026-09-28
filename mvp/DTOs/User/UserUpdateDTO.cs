@@ -1,6 +1,6 @@
-﻿namespace mvp.DTOs
+﻿namespace mvp.DTOs.User
 {
-    public class UserCreateDTO
+    public class UserUpdateDTO
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
