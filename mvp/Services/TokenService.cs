@@ -32,7 +32,7 @@ namespace mvp.Services
 
                 SigningCredentials = credentials,
 
-                Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExperationHours)
+                Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpirationHours)
             };
 
             // Generate Token

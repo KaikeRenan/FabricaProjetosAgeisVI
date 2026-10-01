@@ -34,7 +34,7 @@ namespace mvp.Services
             return batches.Select(Response).ToList();
         }
 
-        public async Task<BatchResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<BatchResponseDTO> GetByIdAsync(Guid Id)
         {
             var batch = await _batchRepository.GetByIdAsync(Id);
 

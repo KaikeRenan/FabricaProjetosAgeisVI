@@ -34,7 +34,7 @@ namespace mvp.Services
             return expirationAlerts.Select(Response).ToList();
         }
 
-        public async Task<ExpirationAlertResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<ExpirationAlertResponseDTO> GetByIdAsync(Guid Id)
         {
             var expirationAlert = await _expirationAlertRepository.GetByIdAsync(Id);
 

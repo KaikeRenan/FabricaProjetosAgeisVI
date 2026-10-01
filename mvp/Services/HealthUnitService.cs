@@ -38,7 +38,7 @@ namespace mvp.Services
             return healthUnits.Select(Response).ToList();
         }
 
-        public async Task<HealthUnitResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<HealthUnitResponseDTO> GetByIdAsync(Guid Id)
         {
             var healthUnit = await _healthUnitRepository.GetByIdAsync(Id);
 

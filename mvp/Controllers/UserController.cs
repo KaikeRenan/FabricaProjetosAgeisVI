@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.User;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
@@ -6,6 +7,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/users")]
     public class UserController : ControllerBase
     {
@@ -40,8 +42,15 @@ namespace mvp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UserCreateDTO dto)
         {
-            var user = await _userService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+            try
+            {
+                var user = await _userService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{Id}")]
@@ -55,6 +64,10 @@ namespace mvp.Controllers
             catch (UserNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -75,8 +88,15 @@ namespace mvp.Controllers
         [HttpGet("email/{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            var user = await _userService.GetByEmailAsync(email);
-            return Ok(user);
+            try
+            {
+                var user = await _userService.GetByEmailAsync(email);
+                return Ok(user);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

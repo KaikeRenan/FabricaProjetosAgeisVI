@@ -3,6 +3,6 @@
     public class JwtSettings
     {
         public string PrivateKey { get; set; } = null!;
-        public int ExperationHours { get; set; }
+        public int ExpirationHours { get; set; }
     }
 }
