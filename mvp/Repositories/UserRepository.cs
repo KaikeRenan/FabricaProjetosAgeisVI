@@ -1,6 +1,8 @@
-﻿using mvp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using mvp.Data;
 using mvp.Entities;
 using mvp.Interfaces.IRepositories;
+using mvp.ValueObjects;
 
 namespace mvp.Repositories
 {
@@ -12,7 +14,20 @@ namespace mvp.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return _dbSet.FirstOrDefault(x => x.Email.Value == email);
+            Email emailObj;
+
+            try
+            {
+                emailObj = new Email(email);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+
+            //var normalized = email.Trim().ToLowerInvariant();
+
+            return await _dbSet.FirstOrDefaultAsync(x => x.Email == emailObj && x.RemovedAt == null);
         }
     }
 }

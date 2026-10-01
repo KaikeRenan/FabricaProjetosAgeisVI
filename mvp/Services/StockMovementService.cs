@@ -35,7 +35,7 @@ namespace mvp.Services
             return stockMovements.Select(Response).ToList();
         }
 
-        public async Task<StockMovementResponseDTO?> GetByIdAsync(Guid id)
+        public async Task<StockMovementResponseDTO> GetByIdAsync(Guid id)
         {
             var stockMovement = await _stockMovementRepository.GetByIdAsync(id);
 

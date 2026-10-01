@@ -35,7 +35,7 @@ namespace mvp.Services
             return stocks.Select(Response).ToList();
         }
 
-        public async Task<StockResponseDTO?> GetByIdAsync(Guid Id)
+        public async Task<StockResponseDTO> GetByIdAsync(Guid Id)
         {
             var stock = await _stockRepository.GetByIdAsync(Id);
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.Login;
 using mvp.Interfaces.Services;
-using mvp.Services;
 
 namespace mvp.Controllers
 {
@@ -11,17 +10,23 @@ namespace mvp.Controllers
     {
         private readonly IAuthService _authService;
 
-        public AuthController(AuthService authService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequestDTO request)
+        public async Task<IActionResult> Login([FromBody]LoginRequestDTO request)
         {
-            var response = _authService.LoginAsync(request);
-
-            return Ok(response);
+            try
+            {
+                var response = await _authService.LoginAsync(request);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
     }
 }
