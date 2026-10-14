@@ -27,5 +27,17 @@ namespace mvp.Entities
             this.Quantity = quantity;
             UpdateTimestamps();
         }
+
+        public void IncreaseQuantity(int quantity)
+        {
+            this.Quantity += quantity;
+            UpdateTimestamps();
+        }
+
+        public void DecreaseQuantity(int quantity)
+        {
+            this.Quantity -= quantity;
+            UpdateTimestamps();
+        }
     }
 }
