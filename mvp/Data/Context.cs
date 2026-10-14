@@ -380,6 +380,13 @@ namespace mvp.Data
                     .HasColumnName("quantity")
                     .IsRequired();
 
+                entity.Property(s => s.OccurredAt)
+                    .HasColumnName("occurred_at")
+                    .IsRequired();
+
+                entity.Property(s => s.TransferId)
+                    .HasColumnName("transfer_id");
+
                 entity.HasOne<Stock>()
                     .WithMany()
                     .HasForeignKey(s => s.StockId)

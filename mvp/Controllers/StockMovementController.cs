@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.StockMovement;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
-using mvp.Services;
 
 namespace mvp.Controllers
 {

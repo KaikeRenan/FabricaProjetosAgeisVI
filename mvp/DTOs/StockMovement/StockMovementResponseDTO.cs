@@ -10,5 +10,7 @@ namespace mvp.DTOs.StockMovement
         public Guid MedicineId { get; set; }
         public StockMovementType Type { get; set; }
         public int Quantity { get; set; }
+        public DateTime OccurredAt { get; set; }
+        public Guid? TransferId { get; set; }
     }
 }

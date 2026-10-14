@@ -291,6 +291,10 @@ namespace mvp.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("medicine_id");
 
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
@@ -302,6 +306,10 @@ namespace mvp.Migrations
                     b.Property<Guid>("StockId")
                         .HasColumnType("uuid")
                         .HasColumnName("stock_id");
+
+                    b.Property<Guid?>("TransferId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("transfer_id");
 
                     b.Property<string>("Type")
                         .IsRequired()
