@@ -22,6 +22,7 @@ namespace mvp.Services
             {
                 Id = user.Id,
                 Email = user.Email.Value
+                Cpf = user.Cpf.Value,
             };
         }
 
@@ -45,9 +46,10 @@ namespace mvp.Services
         public async Task<UserResponseDTO> CreateAsync(UserCreateDTO dto)
         {
             var email = new Email(dto.Email);
+            var cpf = new CPF(dto.Cpf);
             var password = new Password(dto.Password);
 
-            var user = new User(email, password);
+            var user = new User(email, password, cpf);
 
             await _userRepository.CreateAsync(user);
 
@@ -63,8 +65,9 @@ namespace mvp.Services
 
             var email = new Email(dto.Email);
             var password = new Password(dto.Password);
+            var cpf = new CPF(dto.Cpf);
 
-            user.Update(email, password);
+            user.Update(email, password, cpf);
 
             await _userRepository.UpdateAsync(user);
 

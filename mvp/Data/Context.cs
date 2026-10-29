@@ -45,6 +45,14 @@ namespace mvp.Data
                         value => Password.FromHash(value))
                     .IsRequired();
 
+               entity.Property(u => u.Cpf)
+                    .HasColumnName("CPF")
+                    .HasConversion(
+                        cpf => cpf.Value,
+                        value => new CPF(value))
+                    .isRequired();
+                    
+
                 entity.Property(u => u.CreatedAt)
                     .HasColumnName("created_at")
                     .IsRequired();

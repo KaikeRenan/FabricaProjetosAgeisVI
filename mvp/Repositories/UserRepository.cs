@@ -14,5 +14,10 @@ namespace mvp.Repositories
         {
             return _dbSet.FirstOrDefault(x => x.Email.Value == email);
         }
+
+        public async Task<User?> GetByCpfAsync(string cpf)
+        {
+            return _dbSet.FirstOrDefault(x => x.Cpf.Value == cpf);
+        }
     }
 }
