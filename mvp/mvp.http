@@ -4,3 +4,44 @@ GET {{mvp_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+### ---------- Remanejamento guiado por ML (exige JWT) ----------
+
+# 1) Login -> copie o token da resposta para a variável abaixo
+POST {{mvp_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "voce@exemplo.com", "password": "sua-senha" }
+
+###
+@token = COLE_O_TOKEN_AQUI
+
+# 2) Gera sugestões (chama o serviço de ML). Todos os campos do corpo são opcionais.
+POST {{mvp_HostAddress}}/api/redistribution/runs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "leadTimeDays": 2, "minShelfLifeDays": 7 }
+
+###
+# 3) Lista pendentes
+GET {{mvp_HostAddress}}/api/redistribution/suggestions?status=Pending
+Authorization: Bearer {{token}}
+
+###
+# 4) Aceita (EXECUTA o remanejamento: baixa na origem, entrada no destino, TransferOut/TransferIn)
+POST {{mvp_HostAddress}}/api/redistribution/suggestions/COLE_O_ID/accept
+Authorization: Bearer {{token}}
+
+###
+# 5) Ou recusa, com motivo (vira rótulo para avaliar o modelo)
+POST {{mvp_HostAddress}}/api/redistribution/suggestions/COLE_O_ID/reject
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "reason": "Transporte indisponível para essa rota" }
+
+###
+# 6) Qual modelo/tier está servindo
+GET {{mvp_HostAddress}}/api/redistribution/model
+Authorization: Bearer {{token}}

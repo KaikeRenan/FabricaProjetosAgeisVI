@@ -1,0 +1,55 @@
+# Ambiente local completo: PostgreSQL + API .NET + serviço de ML.  (NÃO testado neste repositório; ajuste conforme necessário)
+# Ordem na primeira subida:
+#   1) docker compose up -d db
+#   2) aplicar migrações:  dotnet ef database update --project mvp   (com a connection string apontando para localhost:5432)
+#   3) criar o papel somente-leitura: psql -h localhost -U mvp -d mvp -f docs/sql/ml_reader.sql
+#   4) docker compose --profile jobs run --rm ml-train      # gera o 1º modelo/versão (tier baseline se houver pouco histórico)
+#   5) docker compose up -d ml api
+# Segredos: defina em um arquivo .env (NÃO versionado). Veja .env.example.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: mvp
+      POSTGRES_USER: mvp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD}
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mvp -d mvp"]
+      interval: 5s
+      retries: 10
+
+  ml:
+    build: ./ml
+    environment:
+      ML_API_KEY: ${ML_API_KEY:?defina ML_API_KEY (>=24 chars)}
+      ML_DATABASE_URL: postgresql+psycopg://ml_reader:${ML_READER_PASSWORD:?defina ML_READER_PASSWORD}@db:5432/mvp
+    volumes: ["models:/models"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  ml-train:
+    build: ./ml
+    profiles: ["jobs"]
+    command: ["redistml", "train", "--db-url", "postgresql+psycopg://ml_reader:${ML_READER_PASSWORD}@db:5432/mvp", "--models-dir", "/models"]
+    volumes: ["models:/models"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  api:
+    build: ./mvp
+    ports: ["5080:8080"]
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=mvp;Username=mvp;Password=${POSTGRES_PASSWORD}
+      Jwt__PrivateKey: ${JWT_PRIVATE_KEY:?defina JWT_PRIVATE_KEY (>=40 chars)}
+      Jwt__ExpirationHours: "8"
+      MlService__BaseUrl: http://ml:8000/
+      MlService__ApiKey: ${ML_API_KEY}
+    depends_on:
+      db: { condition: service_healthy }
+      ml: { condition: service_started }
+
+volumes:
+  pgdata:
+  models:

@@ -1,0 +1,64 @@
+# CI (NÃO executado neste repositório antes da entrega; valide no primeiro push).
+name: ci
+on: [push, pull_request]
+
+jobs:
+  ml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e "ml[api,sql,dev]"
+      - run: pytest ml -q
+
+  postgres:
+    # Mock -> seed.sql -> PostgreSQL real -> SqlSource idêntico ao CSV (tests/test_postgres_seed.py)
+    runs-on: ubuntu-latest
+    services:
+      pg:
+        image: postgres:16
+        env: { POSTGRES_PASSWORD: pw, POSTGRES_DB: mvp }
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e "ml[api,sql,dev]"
+      - run: cd ml && redistml mock generate --out data/mock
+      - run: |
+          export PGPASSWORD=pw
+          psql -h localhost -U postgres -d mvp -v ON_ERROR_STOP=1 -f ml/tests/pg/schema.sql
+          cd ml/data/mock/backend && psql -h localhost -U postgres -d mvp -v ON_ERROR_STOP=1 -f seed.sql
+      - run: cd ml && pytest tests/test_postgres_seed.py -q
+        env:
+          PG_TEST_URL: postgresql+psycopg://postgres:pw@localhost:5432/mvp
+          PG_TEST_CSV_DIR: data/mock
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "9.0.x" }
+      - run: dotnet build mvp/mvp.csproj -c Release
+      # Se o modelo do EF mudar sem migração, este comando falha (EF Core 9):
+      - run: |
+          dotnet tool install --global dotnet-ef
+          dotnet ef migrations has-pending-model-changes --project mvp
+
+  contract:
+    # Contrato JSON Python <-> C#: sobe o serviço de ML (dados sintéticos) e roda o cliente .NET real contra ele.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "9.0.x" }
+      - run: pip install -e "ml[api]"
+      - run: |
+          nohup redistml serve-demo --port 8765 > serve.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8765/health && break; sleep 2; done
+      - run: dotnet run --project tests/ContractCheck

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!--
+    Verificação de contrato e de regra de negócio SEM banco e SEM pacotes NuGet:
+    compila os arquivos REAIS do backend (clientes, serviço, entidades, handler) e os exercita contra o
+    serviço de ML em execução. Pré-requisito: `redistml serve-demo` (ou ML_URL/ML_KEY apontando para um ML real).
+    Uso: dotnet run no diretorio tests/ContractCheck
+  -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
+    <UseAppHost>false</UseAppHost>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <StartupObject>P</StartupObject>
+    <RootNamespace>mvp</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Mvp>$(MSBuildThisFileDirectory)..\..\mvp\</Mvp>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="$(Mvp)Entities\BaseEntity.cs;$(Mvp)Entities\Stock.cs;$(Mvp)Entities\StockMovement.cs;$(Mvp)Entities\RedistributionRun.cs;$(Mvp)Entities\RedistributionSuggestion.cs" />
+    <Compile Include="$(Mvp)Enums\*.cs;$(Mvp)Exceptions\*.cs;$(Mvp)Clients\**\*.cs;$(Mvp)Config\MlServiceSettings.cs;$(Mvp)DTOs\Redistribution\*.cs" />
+    <Compile Include="$(Mvp)Interfaces\IRepositories\IRedistributionRepository.cs;$(Mvp)Interfaces\IServices\IRedistributionService.cs" />
+    <Compile Include="$(Mvp)Middleware\*.cs;$(Mvp)Services\RedistributionService.cs" />
+  </ItemGroup>
+</Project>

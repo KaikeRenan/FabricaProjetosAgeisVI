@@ -32,7 +32,7 @@ namespace mvp.Services
 
                 SigningCredentials = credentials,
 
-                Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExperationHours)
+                Expires = DateTime.UtcNow.AddHours(ExpirationHours)
             };
 
             // Generate Token
@@ -41,6 +41,14 @@ namespace mvp.Services
             // Generate Token String
             return handler.WriteToken(token);
         }
+
+        // Aceita a chave antiga (com erro de digitação) para não quebrar appsettings já existentes; padrão: 8h.
+#pragma warning disable CS0618
+        private int ExpirationHours =>
+            _jwtSettings.ExpirationHours > 0 ? _jwtSettings.ExpirationHours
+            : _jwtSettings.ExperationHours > 0 ? _jwtSettings.ExperationHours
+            : 8;
+#pragma warning restore CS0618
 
         private static ClaimsIdentity GenerateClaims(User user)
         {
