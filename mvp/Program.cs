@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using mvp.Clients;
 using mvp.Config;
 using mvp.Data;
 using mvp.Interfaces.IRepositories;
 using mvp.Interfaces.IServices;
 using mvp.Interfaces.Services;
+using mvp.Middleware;
 using mvp.Repositories;
 using mvp.Services;
 using System.Text;
@@ -47,6 +50,27 @@ builder.Services.AddScoped<IBatchRepository, BatchRepository>();
 builder.Services.AddScoped<IExpirationAlertService, ExpirationAlertService>();
 builder.Services.AddScoped<IExpirationAlertRepository, ExpirationAlertRepository>();
 
+builder.Services.AddScoped<IRedistributionService, RedistributionService>();
+builder.Services.AddScoped<IRedistributionRepository, RedistributionRepository>();
+
+// Serviço de ML (previsão de demanda + recomendação de remanejamento). Opcional: se MlService não estiver
+// configurado, a API sobe normalmente e apenas os endpoints /api/redistribution respondem 503.
+builder.Services.Configure<MlServiceSettings>(builder.Configuration.GetSection("MlService"));
+builder.Services.AddHttpClient<IMlServiceClient, MlServiceClient>((serviceProvider, client) =>
+{
+    var settings = serviceProvider.GetRequiredService<IOptions<MlServiceSettings>>().Value;
+
+    if (string.IsNullOrWhiteSpace(settings.BaseUrl) || string.IsNullOrWhiteSpace(settings.ApiKey))
+        return;
+
+    client.BaseAddress = new Uri(settings.BaseUrl.TrimEnd('/') + "/");
+    client.Timeout = TimeSpan.FromSeconds(settings.TimeoutSeconds);
+    client.DefaultRequestHeaders.Add("X-Api-Key", settings.ApiKey);
+});
+
+builder.Services.AddExceptionHandler<DomainExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -76,6 +100,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

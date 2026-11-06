@@ -59,3 +59,13 @@ appsettings.Development.json
 
 #Binaries
 .vs/
+# --- Python / serviço de ML ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+ml/artifacts/
+.env
+ml/data/

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using mvp.Entities;
+using mvp.Enums;
 using mvp.ValueObjects;
 
 namespace mvp.Data
@@ -14,6 +15,8 @@ namespace mvp.Data
         public DbSet<Medicine> Medicines { get; set; } = null!;
         public DbSet<Pharmacy> Pharmacies { get; set; } = null!;
         public DbSet<StockMovement> StockMovements { get; set; } = null!;
+        public DbSet<RedistributionRun> RedistributionRuns { get; set; } = null!;
+        public DbSet<RedistributionSuggestion> RedistributionSuggestions { get; set; } = null!;
 
         public Context(DbContextOptions<Context> options) : base(options) { }
 
@@ -394,6 +397,188 @@ namespace mvp.Data
                     .WithMany()
                     .HasForeignKey(s => s.MedicineId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(s => s.CreatedAt)
+                    .HasColumnName("created_at")
+                    .IsRequired();
+
+                entity.Property(s => s.UpdatedAt)
+                    .HasColumnName("updated_at")
+                    .IsRequired();
+
+                entity.Property(s => s.RemovedAt)
+                    .HasColumnName("removed_at");
+            });
+
+            // RedistributionRun
+            modelBuilder.Entity<RedistributionRun>(entity =>
+            {
+                entity.ToTable("redistribution_runs");
+
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Id)
+                    .HasColumnName("id");
+
+                entity.Property(r => r.AsOf)
+                    .HasColumnName("as_of")
+                    .IsRequired();
+
+                entity.Property(r => r.HorizonWeeks)
+                    .HasColumnName("horizon_weeks")
+                    .IsRequired();
+
+                entity.Property(r => r.ModelVersion)
+                    .HasColumnName("model_version")
+                    .IsRequired();
+
+                entity.Property(r => r.ServingTier)
+                    .HasColumnName("serving_tier")
+                    .IsRequired();
+
+                entity.Property(r => r.DataFingerprint)
+                    .HasColumnName("data_fingerprint")
+                    .IsRequired();
+
+                entity.Property(r => r.Status)
+                    .HasColumnName("status")
+                    .HasConversion<string>()
+                    .IsRequired();
+
+                entity.Property(r => r.Warnings)
+                    .HasColumnName("warnings");
+
+                entity.Property(r => r.ErrorMessage)
+                    .HasColumnName("error_message");
+
+                entity.Property(r => r.TriggeredBy)
+                    .HasColumnName("triggered_by");
+
+                entity.Property(r => r.UnitsAtRisk)
+                    .HasColumnName("units_at_risk")
+                    .IsRequired();
+
+                entity.Property(r => r.UnitsRescued)
+                    .HasColumnName("units_rescued")
+                    .IsRequired();
+
+                entity.Property(r => r.ResidualWasteUnits)
+                    .HasColumnName("residual_waste_units")
+                    .IsRequired();
+
+                entity.Property(r => r.AlreadyExpiredBatches)
+                    .HasColumnName("already_expired_batches")
+                    .IsRequired();
+
+                entity.Property(r => r.NoForecastPairs)
+                    .HasColumnName("no_forecast_pairs")
+                    .IsRequired();
+
+                entity.Property(r => r.CreatedAt)
+                    .HasColumnName("created_at")
+                    .IsRequired();
+
+                entity.Property(r => r.UpdatedAt)
+                    .HasColumnName("updated_at")
+                    .IsRequired();
+
+                entity.Property(r => r.RemovedAt)
+                    .HasColumnName("removed_at");
+            });
+
+            // RedistributionSuggestion
+            modelBuilder.Entity<RedistributionSuggestion>(entity =>
+            {
+                entity.ToTable("redistribution_suggestions");
+
+                entity.HasKey(s => s.Id);
+
+                entity.Property(s => s.Id)
+                    .HasColumnName("id");
+
+                entity.Property(s => s.RunId)
+                    .HasColumnName("run_id")
+                    .IsRequired();
+
+                entity.Property(s => s.MedicineId)
+                    .HasColumnName("medicine_id")
+                    .IsRequired();
+
+                entity.Property(s => s.BatchId)
+                    .HasColumnName("batch_id")
+                    .IsRequired();
+
+                entity.Property(s => s.FromLocationId)
+                    .HasColumnName("from_location_id")
+                    .IsRequired();
+
+                entity.Property(s => s.FromLocationKind)
+                    .HasColumnName("from_location_kind")
+                    .HasConversion<string>()
+                    .IsRequired();
+
+                entity.Property(s => s.ToLocationId)
+                    .HasColumnName("to_location_id")
+                    .IsRequired();
+
+                entity.Property(s => s.ToLocationKind)
+                    .HasColumnName("to_location_kind")
+                    .HasConversion<string>()
+                    .IsRequired();
+
+                entity.Property(s => s.Quantity)
+                    .HasColumnName("quantity")
+                    .IsRequired();
+
+                entity.Property(s => s.ExpirationDate)
+                    .HasColumnName("expiration_date")
+                    .IsRequired();
+
+                entity.Property(s => s.DaysToExpiry)
+                    .HasColumnName("days_to_expiry")
+                    .IsRequired();
+
+                entity.Property(s => s.ProjectedWasteAtSource)
+                    .HasColumnName("projected_waste_at_source")
+                    .IsRequired();
+
+                entity.Property(s => s.DistanceKm)
+                    .HasColumnName("distance_km");
+
+                entity.Property(s => s.ProximityCost)
+                    .HasColumnName("proximity_cost")
+                    .IsRequired();
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status")
+                    .HasConversion<string>()
+                    .IsRequired();
+
+                entity.Property(s => s.DecidedAt)
+                    .HasColumnName("decided_at");
+
+                entity.Property(s => s.DecidedBy)
+                    .HasColumnName("decided_by");
+
+                entity.Property(s => s.RejectionReason)
+                    .HasColumnName("rejection_reason");
+
+                entity.HasOne<RedistributionRun>()
+                    .WithMany()
+                    .HasForeignKey(s => s.RunId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Medicine>()
+                    .WithMany()
+                    .HasForeignKey(s => s.MedicineId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Batch>()
+                    .WithMany()
+                    .HasForeignKey(s => s.BatchId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(s => s.Status);
 
                 entity.Property(s => s.CreatedAt)
                     .HasColumnName("created_at")

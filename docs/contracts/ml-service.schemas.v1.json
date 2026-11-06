@@ -1,0 +1,553 @@
+{
+  "Health": {
+    "properties": {
+      "model_loaded": {
+        "title": "Model Loaded",
+        "type": "boolean"
+      },
+      "status": {
+        "const": "ok",
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "model_loaded"
+    ],
+    "title": "Health",
+    "type": "object"
+  },
+  "ModelInfo": {
+    "properties": {
+      "available_versions": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Available Versions",
+        "type": "array"
+      },
+      "backtest_summary": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Backtest Summary"
+      },
+      "coverage_q90": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Coverage Q90"
+      },
+      "last_train_week": {
+        "format": "date",
+        "title": "Last Train Week",
+        "type": "string"
+      },
+      "model_version": {
+        "title": "Model Version",
+        "type": "string"
+      },
+      "n_series": {
+        "title": "N Series",
+        "type": "integer"
+      },
+      "n_weeks": {
+        "title": "N Weeks",
+        "type": "integer"
+      },
+      "promotion": {
+        "additionalProperties": true,
+        "title": "Promotion",
+        "type": "object"
+      },
+      "serving_tier": {
+        "enum": [
+          "lgbm",
+          "baseline"
+        ],
+        "title": "Serving Tier",
+        "type": "string"
+      },
+      "trained_at": {
+        "format": "date-time",
+        "title": "Trained At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "model_version",
+      "serving_tier",
+      "trained_at",
+      "last_train_week",
+      "n_series",
+      "n_weeks",
+      "promotion",
+      "backtest_summary",
+      "coverage_q90",
+      "available_versions"
+    ],
+    "title": "ModelInfo",
+    "type": "object"
+  },
+  "RecommendationRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "as_of": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Data de referência (padrão: dia seguinte à última movimentação).",
+        "title": "As Of"
+      },
+      "donor_demand_z": {
+        "anyOf": [
+          {
+            "maximum": 3,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": ">0 deixa o doador mais conservador.",
+        "title": "Donor Demand Z"
+      },
+      "lead_time_days": {
+        "anyOf": [
+          {
+            "maximum": 30,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Lead Time Days"
+      },
+      "max_distance_km": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Só tem efeito quando há coordenadas.",
+        "title": "Max Distance Km"
+      },
+      "min_shelf_life_days": {
+        "anyOf": [
+          {
+            "maximum": 365,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Min Shelf Life Days"
+      },
+      "min_transfer_qty": {
+        "anyOf": [
+          {
+            "maximum": 100000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Min Transfer Qty"
+      },
+      "receiver_demand_z": {
+        "anyOf": [
+          {
+            "maximum": 3,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Receiver Demand Z"
+      }
+    },
+    "title": "RecommendationRequest",
+    "type": "object"
+  },
+  "RecommendationResponse": {
+    "$defs": {
+      "ResidualWaste": {
+        "properties": {
+          "batch_id": {
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "batch_number": {
+            "title": "Batch Number",
+            "type": "string"
+          },
+          "days_to_expiry": {
+            "title": "Days To Expiry",
+            "type": "integer"
+          },
+          "expiration_date": {
+            "format": "date-time",
+            "title": "Expiration Date",
+            "type": "string"
+          },
+          "location_id": {
+            "title": "Location Id",
+            "type": "string"
+          },
+          "location_kind": {
+            "enum": [
+              "pharmacy",
+              "health_unit"
+            ],
+            "title": "Location Kind",
+            "type": "string"
+          },
+          "medicine_id": {
+            "title": "Medicine Id",
+            "type": "string"
+          },
+          "unavoidable_waste": {
+            "title": "Unavoidable Waste",
+            "type": "number"
+          }
+        },
+        "required": [
+          "location_id",
+          "location_kind",
+          "medicine_id",
+          "batch_id",
+          "batch_number",
+          "expiration_date",
+          "days_to_expiry",
+          "unavoidable_waste"
+        ],
+        "title": "ResidualWaste",
+        "type": "object"
+      },
+      "RunInfo": {
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "data_age_days": {
+            "title": "Data Age Days",
+            "type": "integer"
+          },
+          "data_fingerprint": {
+            "title": "Data Fingerprint",
+            "type": "string"
+          },
+          "horizon_weeks": {
+            "title": "Horizon Weeks",
+            "type": "integer"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "serving_tier": {
+            "enum": [
+              "lgbm",
+              "baseline"
+            ],
+            "title": "Serving Tier",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "trained_at": {
+            "format": "date-time",
+            "title": "Trained At",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "model_version",
+          "serving_tier",
+          "trained_at",
+          "data_fingerprint",
+          "as_of",
+          "horizon_weeks",
+          "data_age_days",
+          "status",
+          "warnings"
+        ],
+        "title": "RunInfo",
+        "type": "object"
+      },
+      "StockItem": {
+        "properties": {
+          "batch_id": {
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "batch_number": {
+            "title": "Batch Number",
+            "type": "string"
+          },
+          "expiration_date": {
+            "format": "date-time",
+            "title": "Expiration Date",
+            "type": "string"
+          },
+          "location_id": {
+            "title": "Location Id",
+            "type": "string"
+          },
+          "medicine_id": {
+            "title": "Medicine Id",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "medicine_id",
+          "batch_id",
+          "batch_number",
+          "quantity",
+          "expiration_date"
+        ],
+        "title": "StockItem",
+        "type": "object"
+      },
+      "Suggestion": {
+        "properties": {
+          "batch_id": {
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "batch_number": {
+            "title": "Batch Number",
+            "type": "string"
+          },
+          "days_to_expiry": {
+            "title": "Days To Expiry",
+            "type": "integer"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "expiration_date": {
+            "format": "date-time",
+            "title": "Expiration Date",
+            "type": "string"
+          },
+          "from_location_id": {
+            "title": "From Location Id",
+            "type": "string"
+          },
+          "from_location_kind": {
+            "enum": [
+              "pharmacy",
+              "health_unit"
+            ],
+            "title": "From Location Kind",
+            "type": "string"
+          },
+          "medicine_id": {
+            "title": "Medicine Id",
+            "type": "string"
+          },
+          "projected_waste_at_source": {
+            "title": "Projected Waste At Source",
+            "type": "number"
+          },
+          "proximity_cost": {
+            "title": "Proximity Cost",
+            "type": "number"
+          },
+          "quantity": {
+            "exclusiveMinimum": 0,
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "shelf_life_at_arrival": {
+            "title": "Shelf Life At Arrival",
+            "type": "integer"
+          },
+          "to_location_id": {
+            "title": "To Location Id",
+            "type": "string"
+          },
+          "to_location_kind": {
+            "enum": [
+              "pharmacy",
+              "health_unit"
+            ],
+            "title": "To Location Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "medicine_id",
+          "batch_id",
+          "batch_number",
+          "from_location_id",
+          "from_location_kind",
+          "to_location_id",
+          "to_location_kind",
+          "quantity",
+          "expiration_date",
+          "days_to_expiry",
+          "shelf_life_at_arrival",
+          "distance_km",
+          "proximity_cost",
+          "projected_waste_at_source"
+        ],
+        "title": "Suggestion",
+        "type": "object"
+      },
+      "Summary": {
+        "properties": {
+          "n_transfers": {
+            "title": "N Transfers",
+            "type": "integer"
+          },
+          "rescue_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rescue Rate"
+          },
+          "units_at_risk": {
+            "title": "Units At Risk",
+            "type": "number"
+          },
+          "units_rescued": {
+            "title": "Units Rescued",
+            "type": "number"
+          },
+          "unmet_demand_before": {
+            "title": "Unmet Demand Before",
+            "type": "number"
+          }
+        },
+        "required": [
+          "units_at_risk",
+          "units_rescued",
+          "rescue_rate",
+          "n_transfers",
+          "unmet_demand_before"
+        ],
+        "title": "Summary",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "already_expired": {
+        "items": {
+          "$ref": "#/$defs/StockItem"
+        },
+        "title": "Already Expired",
+        "type": "array"
+      },
+      "no_forecast": {
+        "items": {
+          "$ref": "#/$defs/StockItem"
+        },
+        "title": "No Forecast",
+        "type": "array"
+      },
+      "recommendations": {
+        "items": {
+          "$ref": "#/$defs/Suggestion"
+        },
+        "title": "Recommendations",
+        "type": "array"
+      },
+      "residual_waste": {
+        "items": {
+          "$ref": "#/$defs/ResidualWaste"
+        },
+        "title": "Residual Waste",
+        "type": "array"
+      },
+      "run": {
+        "$ref": "#/$defs/RunInfo"
+      },
+      "summary": {
+        "$ref": "#/$defs/Summary"
+      }
+    },
+    "required": [
+      "run",
+      "summary",
+      "recommendations",
+      "residual_waste",
+      "already_expired",
+      "no_forecast"
+    ],
+    "title": "RecommendationResponse",
+    "type": "object"
+  }
+}

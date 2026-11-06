@@ -226,6 +226,193 @@ namespace mvp.Migrations
                     b.ToTable("pharmacies", (string)null);
                 });
 
+            modelBuilder.Entity("mvp.Entities.RedistributionRun", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AlreadyExpiredBatches")
+                        .HasColumnType("integer")
+                        .HasColumnName("already_expired_batches");
+
+                    b.Property<DateOnly>("AsOf")
+                        .HasColumnType("date")
+                        .HasColumnName("as_of");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("DataFingerprint")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("data_fingerprint");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("text")
+                        .HasColumnName("error_message");
+
+                    b.Property<int>("HorizonWeeks")
+                        .HasColumnType("integer")
+                        .HasColumnName("horizon_weeks");
+
+                    b.Property<string>("ModelVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("model_version");
+
+                    b.Property<int>("NoForecastPairs")
+                        .HasColumnType("integer")
+                        .HasColumnName("no_forecast_pairs");
+
+                    b.Property<DateTime?>("RemovedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("removed_at");
+
+                    b.Property<double>("ResidualWasteUnits")
+                        .HasColumnType("double precision")
+                        .HasColumnName("residual_waste_units");
+
+                    b.Property<string>("ServingTier")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("serving_tier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TriggeredBy")
+                        .HasColumnType("text")
+                        .HasColumnName("triggered_by");
+
+                    b.Property<double>("UnitsAtRisk")
+                        .HasColumnType("double precision")
+                        .HasColumnName("units_at_risk");
+
+                    b.Property<double>("UnitsRescued")
+                        .HasColumnType("double precision")
+                        .HasColumnName("units_rescued");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("Warnings")
+                        .HasColumnType("text")
+                        .HasColumnName("warnings");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("redistribution_runs", (string)null);
+                });
+
+            modelBuilder.Entity("mvp.Entities.RedistributionSuggestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("BatchId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("batch_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("DaysToExpiry")
+                        .HasColumnType("integer")
+                        .HasColumnName("days_to_expiry");
+
+                    b.Property<DateTime?>("DecidedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("decided_at");
+
+                    b.Property<string>("DecidedBy")
+                        .HasColumnType("text")
+                        .HasColumnName("decided_by");
+
+                    b.Property<double?>("DistanceKm")
+                        .HasColumnType("double precision")
+                        .HasColumnName("distance_km");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiration_date");
+
+                    b.Property<Guid>("FromLocationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("from_location_id");
+
+                    b.Property<string>("FromLocationKind")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("from_location_kind");
+
+                    b.Property<Guid>("MedicineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("medicine_id");
+
+                    b.Property<double>("ProjectedWasteAtSource")
+                        .HasColumnType("double precision")
+                        .HasColumnName("projected_waste_at_source");
+
+                    b.Property<double>("ProximityCost")
+                        .HasColumnType("double precision")
+                        .HasColumnName("proximity_cost");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("text")
+                        .HasColumnName("rejection_reason");
+
+                    b.Property<DateTime?>("RemovedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("removed_at");
+
+                    b.Property<Guid>("RunId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("run_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("ToLocationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("to_location_id");
+
+                    b.Property<string>("ToLocationKind")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("to_location_kind");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchId");
+
+                    b.HasIndex("MedicineId");
+
+                    b.HasIndex("RunId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("redistribution_suggestions", (string)null);
+                });
+
             modelBuilder.Entity("mvp.Entities.Stock", b =>
                 {
                     b.Property<Guid>("Id")
@@ -466,6 +653,27 @@ namespace mvp.Migrations
                         });
 
                     b.Navigation("Address")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("mvp.Entities.RedistributionSuggestion", b =>
+                {
+                    b.HasOne("mvp.Entities.Batch", null)
+                        .WithMany()
+                        .HasForeignKey("BatchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("mvp.Entities.Medicine", null)
+                        .WithMany()
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("mvp.Entities.RedistributionRun", null)
+                        .WithMany()
+                        .HasForeignKey("RunId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
