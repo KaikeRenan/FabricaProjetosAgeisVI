@@ -41,25 +41,39 @@ Detalhes e justificativas das decisões: [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 ## Como rodar
 
-### Stack completo com Docker
+### Stack completa com Docker
 
-O `docker-compose.yml` sobe PostgreSQL, aplica as migrações, inicia a API .NET e
-o front-end Nuxt. O front-end é construído a partir do repositório irmão
-`../fabrica-projetos-vi`; use `FRONTEND_PATH` caso ele esteja em outro caminho.
-Se a porta `3000` já estiver em uso, defina `FRONTEND_PORT` (por exemplo,
-`FRONTEND_PORT=3001`); o CORS da API é configurado automaticamente para a porta
-escolhida.
+O `docker-compose.yml` sobe PostgreSQL, aplica as migrações e inicia a API .NET.
+O front-end Nuxt fica no profile `frontend` e é clonado do repositório público
+durante o build, então **não é necessário clonar o front-end separadamente**.
 
 ```bash
 cp .env.example .env        # preencha as senhas/chaves
+
+# Banco + API
 docker compose up --build
+
+# Banco + API + front-end
+docker compose --profile frontend up --build
 ```
 
 Depois acesse:
 
-- Front-end: `http://localhost:3000`
+- Front-end: `http://localhost:3000` (quando o profile `frontend` estiver ativo)
 - API/Swagger: `http://localhost:5080/swagger`
 - PostgreSQL: `localhost:5432`
+
+Se a porta `3000` já estiver em uso, defina `FRONTEND_PORT` (por exemplo,
+`FRONTEND_PORT=3001`); o CORS da API é configurado automaticamente para a porta
+escolhida.
+
+Para builds reproduzíveis, fixe a versão do front-end no `.env`:
+
+```dotenv
+FRONTEND_CONTEXT=https://github.com/MuriWolf/fabrica-projetos-vi.git#v1.0.0
+```
+
+O primeiro build precisa de acesso à internet para clonar o front-end.
 
 Pare a stack com `docker compose down` ou apague também os dados com
 `docker compose down -v`.
