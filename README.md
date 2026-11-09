@@ -37,9 +37,40 @@ Detalhes e justificativas das decisões: [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 | `ml/` | Pacote Python `redistml`: dados → features → modelo → otimização → API HTTP → CLI |
 | `tests/ContractCheck/` | Verificação de contrato Python↔C# e de regras do serviço (sem banco, sem NuGet) |
 | `docs/` | Arquitetura, *model card*, operação, mudanças, contrato e SQL de papel somente-leitura |
-| `docker-compose.yml` | Ambiente local: PostgreSQL + API + ML *(não testado)* |
+| `docker-compose.yml` | Stack local: PostgreSQL + migrações + API + front-end Nuxt (ML opcional) |
 
 ## Como rodar
+
+### Stack completo com Docker
+
+O `docker-compose.yml` sobe PostgreSQL, aplica as migrações, inicia a API .NET e
+o front-end Nuxt. O front-end é construído a partir do repositório irmão
+`../fabrica-projetos-vi`; use `FRONTEND_PATH` caso ele esteja em outro caminho.
+Se a porta `3000` já estiver em uso, defina `FRONTEND_PORT` (por exemplo,
+`FRONTEND_PORT=3001`); o CORS da API é configurado automaticamente para a porta
+escolhida.
+
+```bash
+cp .env.example .env        # preencha as senhas/chaves
+docker compose up --build
+```
+
+Depois acesse:
+
+- Front-end: `http://localhost:3000`
+- API/Swagger: `http://localhost:5080/swagger`
+- PostgreSQL: `localhost:5432`
+
+Pare a stack com `docker compose down` ou apague também os dados com
+`docker compose down -v`.
+
+O serviço de ML não sobe por padrão. Para incluí-lo, use os profiles e siga a
+ordem de inicialização do ML descrita em [docs/OPERATIONS.md](docs/OPERATIONS.md):
+
+```bash
+docker compose --profile ml up -d
+docker compose --profile jobs run --rm ml-train
+```
 
 **Backend** (requer .NET 9 e PostgreSQL)
 ```bash

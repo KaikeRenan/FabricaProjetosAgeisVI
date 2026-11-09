@@ -1,11 +1,13 @@
-# Ambiente local completo: PostgreSQL + API .NET + serviço de ML.  (NÃO testado neste repositório; ajuste conforme necessário)
-# Ordem na primeira subida:
-#   1) docker compose up -d db
-#   2) aplicar migrações:  dotnet ef database update --project mvp   (com a connection string apontando para localhost:5432)
-#   3) criar o papel somente-leitura: psql -h localhost -U mvp -d mvp -f docs/sql/ml_reader.sql
-#   4) docker compose --profile jobs run --rm ml-train      # gera o 1º modelo/versão (tier baseline se houver pouco histórico)
-#   5) docker compose up -d ml api
+# Stack local: PostgreSQL + migrações + API .NET + front-end Nuxt.
+# O serviço de ML fica atrás do profile "ml" e o treino do profile "jobs".
 # Segredos: defina em um arquivo .env (NÃO versionado). Veja .env.example.
+#
+# Uso:
+#   cp .env.example .env   # preencha os segredos
+#   docker compose up --build
+#
+# O front-end é construído do repositório irmão ../fabrica-projetos-vi.
+# Use FRONTEND_PATH para apontar para outro caminho.
 services:
   db:
     image: postgres:16
@@ -20,7 +22,18 @@ services:
       interval: 5s
       retries: 10
 
+  migrate:
+    build:
+      context: ./mvp
+      target: migrate
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=mvp;Username=mvp;Password=${POSTGRES_PASSWORD}
+    depends_on:
+      db: { condition: service_healthy }
+    restart: "no"
+
   ml:
+    profiles: ["ml"]
     build: ./ml
     environment:
       ML_API_KEY: ${ML_API_KEY:?defina ML_API_KEY (>=24 chars)}
@@ -41,14 +54,26 @@ services:
     build: ./mvp
     ports: ["5080:8080"]
     environment:
+      ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=mvp;Username=mvp;Password=${POSTGRES_PASSWORD}
       Jwt__PrivateKey: ${JWT_PRIVATE_KEY:?defina JWT_PRIVATE_KEY (>=40 chars)}
       Jwt__ExpirationHours: "8"
       MlService__BaseUrl: http://ml:8000/
       MlService__ApiKey: ${ML_API_KEY}
+      Cors__AllowedOrigins__0: http://localhost:${FRONTEND_PORT:-3000}
+      Cors__AllowedOrigins__1: http://127.0.0.1:${FRONTEND_PORT:-3000}
     depends_on:
-      db: { condition: service_healthy }
-      ml: { condition: service_started }
+      migrate: { condition: service_completed_successfully }
+
+  frontend:
+    build:
+      context: ${FRONTEND_PATH:-../fabrica-projetos-vi}
+    ports: ["${FRONTEND_PORT:-3000}:3000"]
+    environment:
+      NUXT_PUBLIC_USE_MOCKS: "false"
+      NUXT_PUBLIC_API_BASE_URL: http://localhost:5080
+    depends_on:
+      api: { condition: service_started }
 
 volumes:
   pgdata:
