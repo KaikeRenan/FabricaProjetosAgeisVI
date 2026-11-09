@@ -1,13 +1,14 @@
-# Stack local: PostgreSQL + migrações + API .NET + front-end Nuxt.
+# Stack local: PostgreSQL + migrações + API .NET + front-end Nuxt (opcional).
 # O serviço de ML fica atrás do profile "ml" e o treino do profile "jobs".
 # Segredos: defina em um arquivo .env (NÃO versionado). Veja .env.example.
 #
 # Uso:
 #   cp .env.example .env   # preencha os segredos
-#   docker compose up --build
+#   docker compose up --build                      # banco + API
+#   docker compose --profile frontend up --build   # stack completo
 #
-# O front-end é construído do repositório irmão ../fabrica-projetos-vi.
-# Use FRONTEND_PATH para apontar para outro caminho.
+# O front-end é clonado do repositório público em tempo de build.
+# Use FRONTEND_CONTEXT para apontar para outra URL, branch, tag ou commit.
 services:
   db:
     image: postgres:16
@@ -66,8 +67,9 @@ services:
       migrate: { condition: service_completed_successfully }
 
   frontend:
+    profiles: ["frontend"]
     build:
-      context: ${FRONTEND_PATH:-../fabrica-projetos-vi}
+      context: ${FRONTEND_CONTEXT:-https://github.com/MuriWolf/fabrica-projetos-vi.git#main}
     ports: ["${FRONTEND_PORT:-3000}:3000"]
     environment:
       NUXT_PUBLIC_USE_MOCKS: "false"
