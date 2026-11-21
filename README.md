@@ -37,9 +37,54 @@ Detalhes e justificativas das decisões: [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 | `ml/` | Pacote Python `redistml`: dados → features → modelo → otimização → API HTTP → CLI |
 | `tests/ContractCheck/` | Verificação de contrato Python↔C# e de regras do serviço (sem banco, sem NuGet) |
 | `docs/` | Arquitetura, *model card*, operação, mudanças, contrato e SQL de papel somente-leitura |
-| `docker-compose.yml` | Ambiente local: PostgreSQL + API + ML *(não testado)* |
+| `docker-compose.yml` | Stack local: PostgreSQL + migrações + API + front-end Nuxt (ML opcional) |
 
 ## Como rodar
+
+### Stack completa com Docker
+
+O `docker-compose.yml` sobe PostgreSQL, aplica as migrações e inicia a API .NET.
+O front-end Nuxt fica no profile `frontend` e é clonado do repositório público
+durante o build, então **não é necessário clonar o front-end separadamente**.
+
+```bash
+cp .env.example .env        # preencha as senhas/chaves
+
+# Banco + API
+docker compose up --build
+
+# Banco + API + front-end
+docker compose --profile frontend up --build
+```
+
+Depois acesse:
+
+- Front-end: `http://localhost:3000` (quando o profile `frontend` estiver ativo)
+- API/Swagger: `http://localhost:5080/swagger`
+- PostgreSQL: `localhost:5432`
+
+Se a porta `3000` já estiver em uso, defina `FRONTEND_PORT` (por exemplo,
+`FRONTEND_PORT=3001`); o CORS da API é configurado automaticamente para a porta
+escolhida.
+
+Para builds reproduzíveis, fixe a versão do front-end no `.env`:
+
+```dotenv
+FRONTEND_CONTEXT=https://github.com/MuriWolf/fabrica-projetos-vi.git#v1.0.0
+```
+
+O primeiro build precisa de acesso à internet para clonar o front-end.
+
+Pare a stack com `docker compose down` ou apague também os dados com
+`docker compose down -v`.
+
+O serviço de ML não sobe por padrão. Para incluí-lo, use os profiles e siga a
+ordem de inicialização do ML descrita em [docs/OPERATIONS.md](docs/OPERATIONS.md):
+
+```bash
+docker compose --profile ml up -d
+docker compose --profile jobs run --rm ml-train
+```
 
 **Backend** (requer .NET 9 e PostgreSQL)
 ```bash

@@ -1,6 +1,7 @@
 ﻿using mvp.Data;
 using mvp.Entities;
 using mvp.Interfaces.IRepositories;
+using mvp.ValueObjects;
 
 namespace mvp.Repositories
 {
@@ -12,7 +13,9 @@ namespace mvp.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return _dbSet.FirstOrDefault(x => x.Email.Value == email);
+            // Compare the converted property directly so EF Core can translate the
+            // value object to the underlying "email" column.
+            return _dbSet.FirstOrDefault(x => x.Email == new Email(email));
         }
     }
 }
