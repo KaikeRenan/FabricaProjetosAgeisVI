@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.Stock;
 using mvp.Exceptions;
@@ -6,6 +7,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/stocks")]
     public class StockController : ControllerBase
     {

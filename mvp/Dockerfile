@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY mvp.csproj ./
-RUN dotnet restore
+
 COPY . .
+RUN dotnet restore mvp.csproj
 RUN dotnet publish mvp.csproj -c Release -o /out --no-restore
 
 # One-shot service used by docker compose to apply EF Core migrations.

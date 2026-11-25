@@ -1,6 +1,6 @@
 ﻿namespace mvp.Exceptions
 {
-    public class MedicineNotFoundException : BaseException
+    public class MedicineNotFoundException : NotFoundException
     {
         public MedicineNotFoundException() : base("Medicamento não encontrado")
         {

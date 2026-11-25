@@ -41,11 +41,32 @@ namespace mvp.Data
                         value => new Email(value))
                     .IsRequired();
 
+                entity.HasIndex(u => u.Email)
+                    .IsUnique()
+                    .HasFilter("removed_at IS NULL");
+
                 entity.Property(u => u.Password)
                     .HasColumnName("password")
                     .HasConversion(
                         password => password.Value,
                         value => Password.FromHash(value))
+                    .IsRequired();
+
+                entity.Property(u => u.CPF)
+                    .HasColumnName("cpf")
+                    .HasConversion(
+                        cpf => cpf!.Value,
+                        value => new CPF(value))
+                    .HasMaxLength(11);
+
+                entity.HasIndex(u => u.CPF)
+                    .IsUnique()
+                    .HasFilter("removed_at IS NULL");
+
+                entity.Property(u => u.Role)
+                    .HasColumnName("role")
+                    .HasConversion<string>()
+                    .HasMaxLength(20)
                     .IsRequired();
 
                 entity.Property(u => u.CreatedAt)
@@ -408,6 +429,19 @@ namespace mvp.Data
 
                 entity.Property(s => s.RemovedAt)
                     .HasColumnName("removed_at");
+
+                entity.Property(s => s.OccurredAt)
+                    .HasColumnName("occurred_at")
+                    .IsRequired();
+
+                entity.Property(s => s.TransferId)
+                    .HasColumnName("transfer_id");
+
+                entity.HasIndex(s => s.TransferId);
+
+                entity.HasIndex(s => new { s.OccurredAt, s.Id })
+                    .IsDescending()
+                    .HasFilter("removed_at IS NULL");
             });
 
             // RedistributionRun

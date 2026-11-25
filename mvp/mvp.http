@@ -45,3 +45,7 @@ Content-Type: application/json
 # 6) Qual modelo/tier está servindo
 GET {{mvp_HostAddress}}/api/redistribution/model
 Authorization: Bearer {{token}}
+
+### Gerar alertas de vencimento (Admin/Manager)
+POST http://localhost:5080/api/expirationAlerts/generate?daysAhead=30&autoResolve=true
+Authorization: Bearer {{token}}

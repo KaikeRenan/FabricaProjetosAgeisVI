@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.ExpirationAlert;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
@@ -6,6 +7,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/expirationAlerts")]
     public class ExpirationAlertController : ControllerBase
     {
@@ -19,7 +21,7 @@ namespace mvp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var expirationAlerts = await _expirationAlertService.GetAllAsync();
+            var expirationAlerts = await _expirationAlertService.GetAllWithDetailsAsync();
             return Ok(expirationAlerts);
         }
 
@@ -28,7 +30,7 @@ namespace mvp.Controllers
         {
             try
             {
-                var expirationAlert = await _expirationAlertService.GetByIdAsync(Id);
+                var expirationAlert = await _expirationAlertService.GetByIdWithDetailsAsync(Id);
                 return Ok(expirationAlert);
             }
             catch (ExpirationAlertNotFoundException ex)
@@ -70,6 +72,14 @@ namespace mvp.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpPost("generate")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> Generate([FromQuery] int daysAhead = 30, [FromQuery] bool autoResolve = true, CancellationToken ct = default)
+        {
+            var result = await _expirationAlertService.GenerateAsync(daysAhead, autoResolve, ct);
+            return Ok(result);
         }
     }
 }

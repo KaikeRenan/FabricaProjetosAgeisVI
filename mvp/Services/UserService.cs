@@ -1,5 +1,6 @@
 ﻿using mvp.DTOs.User;
 using mvp.Entities;
+using mvp.Enums;
 using mvp.Exceptions;
 using mvp.Interfaces.IRepositories;
 using mvp.Interfaces.IServices;
@@ -21,7 +22,9 @@ namespace mvp.Services
             return new UserResponseDTO
             {
                 Id = user.Id,
-                Email = user.Email.Value
+                Email = user.Email.Value,
+                CPF = user.CPF?.Value,
+                Role = user.Role
             };
         }
 
@@ -32,7 +35,7 @@ namespace mvp.Services
             return users.Select(Response).ToList();
         }
 
-        public async Task<UserResponseDTO> GetByIdAsync(Guid Id)
+        public async Task<UserResponseDTO?> GetByIdAsync(Guid Id)
         {
             var user = await _userRepository.GetByIdAsync(Id);
 
@@ -44,10 +47,17 @@ namespace mvp.Services
 
         public async Task<UserResponseDTO> CreateAsync(UserCreateDTO dto)
         {
+            if (await _userRepository.GetByEmailAsync(dto.Email) is not null)
+                throw new EmailAlreadyRegisteredException();
+
+            if (!string.IsNullOrWhiteSpace(dto.CPF) && await _userRepository.GetByCPFAsync(dto.CPF) is not null)
+                throw new CPFAlreadyRegisteredException();
+
             var email = new Email(dto.Email);
             var password = new Password(dto.Password);
+            var cpf = string.IsNullOrWhiteSpace(dto.CPF) ? null : new CPF(dto.CPF);
 
-            var user = new User(email, password);
+            var user = new User(email, password, dto.Role ?? UserRole.Operator, cpf);
 
             await _userRepository.CreateAsync(user);
 
@@ -61,10 +71,27 @@ namespace mvp.Services
             if (user == null)
                 throw new UserNotFoundException();
 
+            var sameEmail = await _userRepository.GetByEmailAsync(dto.Email);
+            if (sameEmail is not null && sameEmail.Id != user.Id)
+                throw new EmailAlreadyRegisteredException();
+
             var email = new Email(dto.Email);
             var password = new Password(dto.Password);
 
-            user.Update(email, password);
+            var cpf = dto.CPF is null
+                ? user.CPF                                  // não enviado: mantém
+                : string.IsNullOrWhiteSpace(dto.CPF)
+                    ? null                                  // string vazia: remove
+                    : new CPF(dto.CPF);
+
+            if (cpf is not null && cpf.Value != user.CPF?.Value)
+            {
+                var existing = await _userRepository.GetByCPFAsync(cpf.Value);
+                if (existing is not null && existing.Id != user.Id)
+                    throw new CPFAlreadyRegisteredException();
+            }
+
+            user.Update(email, password, dto.Role ?? user.Role, cpf);
 
             await _userRepository.UpdateAsync(user);
 

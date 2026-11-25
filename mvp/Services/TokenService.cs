@@ -55,9 +55,7 @@ namespace mvp.Services
             var ci = new ClaimsIdentity();
 
             ci.AddClaim(new Claim(ClaimTypes.Name, user.Email.Value));
-
-            //foreach (var role in user.Roles)
-            //    ci.AddClaim(new Claim(Claim.Role, role));
+            ci.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             return ci;
         }

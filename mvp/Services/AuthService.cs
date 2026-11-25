@@ -29,7 +29,7 @@ namespace mvp.Services
 
             var token = _tokenService.Generate(user);
 
-            return new LoginResponseDTO(token);
+            return new LoginResponseDTO(token, user.Role);
         }
     }
 }

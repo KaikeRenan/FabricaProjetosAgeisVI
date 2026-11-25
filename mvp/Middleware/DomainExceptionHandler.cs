@@ -4,10 +4,6 @@ using mvp.Exceptions;
 
 namespace mvp.Middleware
 {
-    /// <summary>
-    /// Traduz exceções de domínio em respostas ProblemDetails (RFC 7807) com o status HTTP correto,
-    /// evitando try/catch repetido em cada controller. Exceções não mapeadas seguem o fluxo padrão (500).
-    /// </summary>
     public class DomainExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<DomainExceptionHandler> _logger;
@@ -25,6 +21,7 @@ namespace mvp.Middleware
                 ConflictException => (StatusCodes.Status409Conflict, "Conflito de estado"),
                 UpstreamUnavailableException => (StatusCodes.Status503ServiceUnavailable, "Serviço dependente indisponível"),
                 UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Não autorizado"),
+                ArgumentException => (StatusCodes.Status400BadRequest, "Requisição inválida"),
                 _ => (0, string.Empty)
             };
 

@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.StockMovement;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
-using mvp.Services;
 
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/stockMovements")]
     public class StockMovementController : ControllerBase
     {
@@ -18,10 +19,10 @@ namespace mvp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
         {
-            var stockMovements = await _stockMovementService.GetAllAsync();
-            return Ok(stockMovements);
+            var result = await _stockMovementService.GetPagedAsync(page, pageSize);
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]

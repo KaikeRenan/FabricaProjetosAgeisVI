@@ -85,5 +85,25 @@ namespace mvp.Services
 
             await _expirationAlertRepository.DeleteAsync(expirationAlert);
         }
+
+        public Task<List<ExpirationAlertResponseDTO>> GetAllWithDetailsAsync() => _expirationAlertRepository.GetAllWithDetailsAsync();
+
+        public async Task<ExpirationAlertResponseDTO?> GetByIdWithDetailsAsync(Guid id)
+        {
+            var alert = await _expirationAlertRepository.GetByIdWithDetailsAsync(id);
+
+            if (alert is null)
+                throw new ExpirationAlertNotFoundException();
+
+            return alert;
+        }
+
+        public async Task<ExpirationAlertGenerationResultDTO> GenerateAsync(int daysAhead, bool autoResolve, CancellationToken ct) 
+        {
+            if (daysAhead is < 0 or > 365)
+                throw new ArgumentException("daysAhead deve estar entre 0 e 365.", nameof(daysAhead));
+
+            return await _expirationAlertRepository.GenerateAsync(daysAhead, autoResolve, ct);
+        }
     }
 }

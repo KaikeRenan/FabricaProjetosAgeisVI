@@ -70,5 +70,5 @@ def test_contract_snapshot():
     current = json.loads(json.dumps(current, sort_keys=True))
     if not snap.exists():
         snap.parent.mkdir(parents=True, exist_ok=True)
-        snap.write_text(json.dumps(current, indent=2, sort_keys=True, ensure_ascii=False))
-    assert json.loads(snap.read_text()) == current, "Contrato v1 do serviço de ML mudou."
+        snap.write_text(json.dumps(current, indent=2, sort_keys=True, ensure_ascii=False), encoding="utf-8")
+    assert json.loads(snap.read_text(encoding="utf-8")) == current, "Contrato v1 do serviço de ML mudou."

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.Medicine;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
-using mvp.Services;
 
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/medicines")]
     public class MedicineController : ControllerBase
     {

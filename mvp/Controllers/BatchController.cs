@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.Batch;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
@@ -6,6 +7,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/batches")]
     public class BatchController : ControllerBase
     {

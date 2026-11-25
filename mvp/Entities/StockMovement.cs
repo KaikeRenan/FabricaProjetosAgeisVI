@@ -9,18 +9,22 @@ namespace mvp.Entities
         public Guid MedicineId { get; private set; }
         public StockMovementType Type { get; private set; }
         public int Quantity { get; private set; }
+        public DateTime OccurredAt { get; private set; }
+        public Guid? TransferId { get; private set; }
 
         protected StockMovement()
         {
         }
 
-        public StockMovement(Guid stockId, Guid batchId, Guid medicineId, StockMovementType type, int quantity)
+        public StockMovement(Guid stockId, Guid batchId, Guid medicineId, StockMovementType type, int quantity, DateTime? occurredAt = null, Guid? transferId = null)
         {
             this.StockId = stockId;
             this.BatchId = batchId;
             this.MedicineId = medicineId;
             this.Type = type;
             this.Quantity = quantity;
+            OccurredAt = occurredAt?.ToUniversalTime() ?? DateTime.UtcNow;
+            TransferId = transferId;
         }
 
         public void Update(Guid stockId, Guid batchId, Guid medicineId, StockMovementType type, int quantity)

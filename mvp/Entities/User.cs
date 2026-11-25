@@ -1,4 +1,5 @@
-﻿using mvp.ValueObjects;
+﻿using mvp.Enums;
+using mvp.ValueObjects;
 
 namespace mvp.Entities
 {
@@ -6,6 +7,8 @@ namespace mvp.Entities
     {
         public Email Email { get; private set; }
         public Password Password { get; private set; }
+        public UserRole Role { get; private set; }
+        public CPF? CPF { get; private set; }
 
         protected User()
         {
@@ -13,16 +16,20 @@ namespace mvp.Entities
             Password = null!;
         }
 
-        public User(Email email, Password password)
+        public User(Email email, Password password, UserRole role, CPF? cpf)
         {
             this.Email = email;
             this.Password = password;
+            Role = role;
+            CPF = cpf;
         }
 
-        public void Update(Email email, Password password)
+        public void Update(Email email, Password password, UserRole role, CPF? cpf)
         {
             this.Email = email;
             this.Password = password;
+            Role = role;
+            CPF = cpf;
 
             UpdateTimestamps();
         }

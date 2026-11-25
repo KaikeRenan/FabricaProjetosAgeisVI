@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvp.DTOs.User;
 using mvp.Exceptions;
 using mvp.Interfaces.IServices;
@@ -6,6 +7,7 @@ using mvp.Interfaces.IServices;
 namespace mvp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/users")]
     public class UserController : ControllerBase
     {
@@ -38,6 +40,7 @@ namespace mvp.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] UserCreateDTO dto)
         {
             var user = await _userService.CreateAsync(dto);

@@ -12,7 +12,7 @@
             if (!value.Contains("@"))
                 throw new ArgumentException("Email com formato inválido");
 
-            this.Value = value.Trim();
+            this.Value = value.Trim().ToLowerInvariant();
         }
     }
 }

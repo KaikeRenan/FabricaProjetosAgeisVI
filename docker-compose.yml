@@ -46,7 +46,15 @@ services:
   ml-train:
     build: ./ml
     profiles: ["jobs"]
-    command: ["redistml", "train", "--db-url", "postgresql+psycopg://ml_reader:${ML_READER_PASSWORD}@db:5432/mvp", "--models-dir", "/models"]
+    command:
+      [
+        "redistml",
+        "train",
+        "--db-url",
+        "postgresql+psycopg://ml_reader:${ML_READER_PASSWORD}@db:5432/mvp",
+        "--models-dir",
+        "/models",
+      ]
     volumes: ["models:/models"]
     depends_on:
       db: { condition: service_healthy }
@@ -63,6 +71,8 @@ services:
       MlService__ApiKey: ${ML_API_KEY}
       Cors__AllowedOrigins__0: http://localhost:${FRONTEND_PORT:-3000}
       Cors__AllowedOrigins__1: http://127.0.0.1:${FRONTEND_PORT:-3000}
+      ExpirationAlerts__IntervalHours: "24"
+      ExpirationAlerts__DaysAhead: "30"
     depends_on:
       migrate: { condition: service_completed_successfully }
 

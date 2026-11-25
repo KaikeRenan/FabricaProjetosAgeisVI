@@ -478,6 +478,10 @@ namespace mvp.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("medicine_id");
 
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
@@ -489,6 +493,10 @@ namespace mvp.Migrations
                     b.Property<Guid>("StockId")
                         .HasColumnType("uuid")
                         .HasColumnName("stock_id");
+
+                    b.Property<Guid?>("TransferId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("transfer_id");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -507,6 +515,12 @@ namespace mvp.Migrations
 
                     b.HasIndex("StockId");
 
+                    b.HasIndex("TransferId");
+
+                    b.HasIndex("OccurredAt", "Id")
+                        .IsDescending()
+                        .HasFilter("removed_at IS NULL");
+
                     b.ToTable("stock_movements", (string)null);
                 });
 
@@ -516,6 +530,11 @@ namespace mvp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("CPF")
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)")
+                        .HasColumnName("cpf");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -535,11 +554,25 @@ namespace mvp.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("removed_at");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("role");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CPF")
+                        .IsUnique()
+                        .HasFilter("removed_at IS NULL");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("removed_at IS NULL");
 
                     b.ToTable("users", (string)null);
                 });

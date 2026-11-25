@@ -1,6 +1,6 @@
 namespace mvp.Exceptions
 {
-    public class StockNotFoundException : BaseException
+    public class StockNotFoundException : NotFoundException
     {
         public StockNotFoundException() : base("Estoque não encontrado")
         {

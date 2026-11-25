@@ -11,6 +11,7 @@ using mvp.Interfaces.Services;
 using mvp.Middleware;
 using mvp.Repositories;
 using mvp.Services;
+using mvp.Workers;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,6 +65,9 @@ builder.Services.AddScoped<IExpirationAlertRepository, ExpirationAlertRepository
 
 builder.Services.AddScoped<IRedistributionService, RedistributionService>();
 builder.Services.AddScoped<IRedistributionRepository, RedistributionRepository>();
+
+builder.Services.Configure<ExpirationAlertSettings>(builder.Configuration.GetSection("ExpirationAlerts"));
+builder.Services.AddHostedService<ExpirationAlertGenerationWorker>();
 
 // Serviço de ML (previsão de demanda + recomendação de remanejamento). Opcional: se MlService não estiver
 // configurado, a API sobe normalmente e apenas os endpoints /api/redistribution respondem 503.

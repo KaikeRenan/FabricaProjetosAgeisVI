@@ -1,4 +1,5 @@
-﻿using mvp.DTOs.StockMovement;
+﻿using mvp.DTOs.Common;
+using mvp.DTOs.StockMovement;
 using mvp.Entities;
 using mvp.Exceptions;
 using mvp.Interfaces.IRepositories;
@@ -25,6 +26,8 @@ namespace mvp.Services
                 MedicineId = stockMovement.MedicineId,
                 Type = stockMovement.Type,
                 Quantity = stockMovement.Quantity,
+                OccurredAt = stockMovement.OccurredAt,
+                TransferId = stockMovement.TransferId,
             };
         }
 
@@ -52,10 +55,12 @@ namespace mvp.Services
                 dto.BatchId,
                 dto.MedicineId,
                 dto.Type,
-                dto.Quantity
+                dto.Quantity,
+                dto.OccurredAt,
+                dto.TransferId
             );
 
-            await _stockMovementRepository.CreateAsync(stockMovement);
+            await _stockMovementRepository.CreateWithStockUpdateAsync(stockMovement);
 
             return Response(stockMovement);
         }
@@ -88,6 +93,25 @@ namespace mvp.Services
                 throw new StockMovementNotFoundException();
 
             await _stockMovementRepository.DeleteAsync(stockMovement);
+        }
+
+        private const int MaxPageSize = 200;
+
+        public async Task<PagedResult<StockMovementResponseDTO>> GetPagedAsync(int page, int pageSize)
+        {
+            page = Math.Max(1, page);
+            pageSize = Math.Clamp(pageSize, 1, MaxPageSize);
+
+            var (items, total) = await _stockMovementRepository.GetPagedAsync((page - 1) * pageSize, pageSize);
+
+            return new PagedResult<StockMovementResponseDTO>
+            {
+                Items = items.Select(Response).ToList(),
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = total,
+                TotalPages = (int)Math.Ceiling(total / (double)pageSize)
+            };
         }
     }
 }
