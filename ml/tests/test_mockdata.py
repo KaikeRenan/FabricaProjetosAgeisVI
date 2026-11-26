@@ -120,3 +120,28 @@ def test_demo_events_only_add_stock_and_do_not_touch_demand():
     assert all(ledger_checks(ev).values())
     added = ev.raw.movements["type"].eq("Entry").sum() - base.raw.movements["type"].eq("Entry").sum()
     assert added >= 4                                                  # entradas extras (a política pode reagir depois)
+
+def test_transfer_pairs_share_transfer_id(ds):
+    m = ds.raw.movements
+    transfer = m[m["type"].isin(["TransferIn", "TransferOut"])]
+
+    assert transfer["transfer_id"].notna().all()
+    assert not m[~m["type"].isin(["TransferIn", "TransferOut"])]["transfer_id"].notna().any()
+
+    out = transfer[transfer["type"] == "TransferOut"]
+    inn = transfer[transfer["type"] == "TransferIn"]
+
+    assert out["transfer_id"].is_unique
+    assert set(out["transfer_id"]) == set(inn["transfer_id"])
+
+def test_transfer_legs_are_consistent(ds):
+    m = ds.raw.movements
+    out = m[m["type"] == "TransferOut"]
+    inn = m[m["type"] == "TransferIn"]
+
+    first_in = m[m["type"].isin(["Entry", "TransferIn"])].groupby("stock_id")["created_at"].min()
+    assert (out["created_at"] >= out["stock_id"].map(first_in)).all()
+
+    pairs = out.merge(inn[["transfer_id", "created_at"]], on="transfer_id", suffixes=("_out", "_in"))
+    assert len(pairs) == len(out)
+    assert (pairs["created_at_out"] == pairs["created_at_in"]).all()

@@ -10,10 +10,20 @@ namespace mvp.Services
     public class StockMovementService : IStockMovementService
     {
         private readonly IStockMovementRepository _stockMovementRepository;
+        private readonly IStockRepository _stockRepository;
+        private readonly IBatchRepository _batchRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public StockMovementService(IStockMovementRepository stockMovementRepository)
+        public StockMovementService(
+            IStockMovementRepository stockMovementRepository,
+            IStockRepository stockRepository,
+            IBatchRepository batchRepository,
+            IMedicineRepository medicineRepository)
         {
             _stockMovementRepository = stockMovementRepository;
+            _stockRepository = stockRepository;
+            _batchRepository = batchRepository;
+            _medicineRepository = medicineRepository;
         }
 
         private StockMovementResponseDTO Response(StockMovement stockMovement)
@@ -50,6 +60,8 @@ namespace mvp.Services
 
         public async Task<StockMovementResponseDTO> CreateAsync(StockMovementCreateDTO dto)
         {
+            await EnsureReferencesAsync(dto.StockId, dto.BatchId, dto.MedicineId);
+
             var stockMovement = new StockMovement(
                 dto.StockId,
                 dto.BatchId,
@@ -67,6 +79,8 @@ namespace mvp.Services
 
         public async Task<StockMovementResponseDTO> UpdateAsync(Guid id, StockMovementUpdateDTO dto)
         {
+            await EnsureReferencesAsync(dto.StockId, dto.BatchId, dto.MedicineId);
+
             var stockMovement = await _stockMovementRepository.GetByIdAsync(id);
 
             if (stockMovement == null)
@@ -112,6 +126,18 @@ namespace mvp.Services
                 TotalItems = total,
                 TotalPages = (int)Math.Ceiling(total / (double)pageSize)
             };
+        }
+
+        private async Task EnsureReferencesAsync(Guid stockId, Guid batchId, Guid medicineId)
+        {
+            if (await _stockRepository.GetByIdAsync(stockId) is null)
+                throw new StockNotFoundException();
+
+            if (await _batchRepository.GetByIdAsync(batchId) is null)
+                throw new BatchNotFoundException();
+
+            if (await _medicineRepository.GetByIdAsync(medicineId) is null)
+                throw new MedicineNotFoundException();
         }
     }
 }

@@ -51,7 +51,7 @@ _COLS = {
     "health_units": "id, name, cnes, street, number, neighborhood, zip_code, zone, created_at, updated_at, removed_at",
     "batches": "id, medicine_id, batch_number, fabrication_date, expiration_date, created_at, updated_at, removed_at",
     "stocks": "id, pharmacy_id, health_unit_id, batch_id, quantity, created_at, updated_at, removed_at",
-    "stock_movements": "id, stock_id, batch_id, medicine_id, type, quantity, created_at, updated_at, removed_at",
+    "stock_movements": "id, stock_id, batch_id, medicine_id, type, quantity, occurred_at, transfer_id, created_at, updated_at, removed_at",
 }
 
 
@@ -82,6 +82,8 @@ def write_backend_seed(ds: MockDataset, out: Path) -> list[str]:
     mv["created_at"] = _utc(mv["created_at"])
     mv["updated_at"] = mv["created_at"]
     mv["removed_at"] = None
+    mv["occurred_at"] = mv["created_at"]
+    mv["transfer_id"] = mv["transfer_id"].where(mv["transfer_id"].notna(), None)
 
     frames = {"medicines": med, "pharmacies": ph, "health_units": hu, "batches": bat, "stocks": st, "stock_movements": mv}
     sql = [_SEED_HEADER]

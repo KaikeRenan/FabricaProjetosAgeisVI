@@ -9,10 +9,12 @@ namespace mvp.Services
     public class BatchService : IBatchService
     {
         private readonly IBatchRepository _batchRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public BatchService(IBatchRepository batchRepository)
+        public BatchService(IBatchRepository batchRepository, IMedicineRepository medicineRepository)
         {
             _batchRepository = batchRepository;
+            _medicineRepository = medicineRepository;
         }
 
         private BatchResponseDTO Response(Batch batch)
@@ -46,6 +48,8 @@ namespace mvp.Services
 
         public async Task<BatchResponseDTO> CreateAsync(BatchCreateDTO dto)
         {
+            await EnsureMedicineExistsAsync(dto.MedicineId);
+
             var batch = new Batch(
                 dto.MedicineId, 
                 dto.BatchNumber, 
@@ -60,6 +64,8 @@ namespace mvp.Services
 
         public async Task<BatchResponseDTO> UpdateAsync(Guid Id, BatchUpdateDTO dto)
         {
+            await EnsureMedicineExistsAsync(dto.MedicineId);
+
             var batch = await _batchRepository.GetByIdAsync(Id);
 
             if (batch == null)
@@ -85,6 +91,12 @@ namespace mvp.Services
                 throw new BatchNotFoundException();
 
             await _batchRepository.DeleteAsync(batch);
+        }
+
+        private async Task EnsureMedicineExistsAsync(Guid medicineId)
+        {
+            if (await _medicineRepository.GetByIdAsync(medicineId) is null)
+                throw new MedicineNotFoundException();
         }
     }
 }

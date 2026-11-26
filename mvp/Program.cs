@@ -66,6 +66,8 @@ builder.Services.AddScoped<IExpirationAlertRepository, ExpirationAlertRepository
 builder.Services.AddScoped<IRedistributionService, RedistributionService>();
 builder.Services.AddScoped<IRedistributionRepository, RedistributionRepository>();
 
+builder.Services.AddScoped<IPharmacyRepository, PharmacyRepository>();
+
 builder.Services.Configure<ExpirationAlertSettings>(builder.Configuration.GetSection("ExpirationAlerts"));
 builder.Services.AddHostedService<ExpirationAlertGenerationWorker>();
 
@@ -110,6 +112,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+await UserBootstrap.EnsureAsync(app.Services, app.Configuration, app.Logger);
 
 if (app.Environment.IsDevelopment())
 {

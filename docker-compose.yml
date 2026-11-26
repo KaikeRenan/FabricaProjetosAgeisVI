@@ -42,6 +42,8 @@ services:
     volumes: ["models:/models"]
     depends_on:
       db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+      seed: { condition: service_completed_successfully }
 
   ml-train:
     build: ./ml
@@ -58,6 +60,24 @@ services:
     volumes: ["models:/models"]
     depends_on:
       db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+      seed: { condition: service_completed_successfully }
+
+  seed:
+    build:
+      context: ./ml
+      target: seed
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: mvp
+      PGUSER: mvp
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      ML_READER_PASSWORD: ${ML_READER_PASSWORD:-}
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: "no"
 
   api:
     build: ./mvp
@@ -73,8 +93,19 @@ services:
       Cors__AllowedOrigins__1: http://127.0.0.1:${FRONTEND_PORT:-3000}
       ExpirationAlerts__IntervalHours: "24"
       ExpirationAlerts__DaysAhead: "30"
+      BootstrapUsers__Enabled: ${BOOTSTRAP_USERS_ENABLED:-true}
+      BootstrapUsers__Users__0__Email: ${ADMIN_EMAIL:-admin@teste.com}
+      BootstrapUsers__Users__0__Password: ${ADMIN_PASSWORD:-1234567890}
+      BootstrapUsers__Users__0__Role: Admin
+      BootstrapUsers__Users__1__Email: ${MANAGER_EMAIL:-manager@teste.com}
+      BootstrapUsers__Users__1__Password: ${MANAGER_PASSWORD:-1234567890}
+      BootstrapUsers__Users__1__Role: Manager
+      BootstrapUsers__Users__2__Email: ${OPERATOR_EMAIL:-operator@teste.com}
+      BootstrapUsers__Users__2__Password: ${OPERATOR_PASSWORD:-1234567890}
+      BootstrapUsers__Users__2__Role: Operator
     depends_on:
       migrate: { condition: service_completed_successfully }
+      seed: { condition: service_completed_successfully }
 
   frontend:
     profiles: ["frontend"]

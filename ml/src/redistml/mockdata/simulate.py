@@ -175,7 +175,16 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
             return int(r_led.integers(25, 100))
         return int(r_led.uniform(0.55, 0.95) * r_led.uniform(lo, hi) * 30.4)
 
-    def receive(si: int, day: int, qty: int, exp_day: int, mov_type: str, batch_id: str | None = None):
+    def receive(
+        si: int,
+        day: int,
+        qty: int,
+        exp_day: int,
+        mov_type: str,
+        batch_id: str | None = None,
+        transfer_id: str | None = None,
+        when: pd.Timestamp | None = None,
+    ) -> None:
         u, m = series[si]
         sp = specs[m]
         if batch_id is None:
@@ -188,9 +197,9 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
         sid = new_id()
         stocks[sid] = dict(stock_id=sid, pharmacy_id=loc_ids[u] if kinds[u] == "pharmacy" else None,
                            health_unit_id=loc_ids[u] if kinds[u] == "health_unit" else None, batch_id=batch_id,
-                           created_at=ts(day, 6, 8), updated_at=None, removed_at=pd.NaT, qty=qty)
+                           created_at=(when if when is not None else ts(day, 6, 8)), updated_at=None, removed_at=pd.NaT, qty=qty)
         stocks[sid]["updated_at"] = stocks[sid]["created_at"]
-        movs.append((new_id(), stocks[sid]["created_at"], sid, batch_id, med_ids[m], mov_type, qty))
+        movs.append((new_id(), stocks[sid]["created_at"], sid, batch_id, med_ids[m], mov_type, qty, transfer_id))
         st = state[si]
         st["batches"].append([batch_id, sid, qty, exp_day])
         st["batches"].sort(key=lambda b: b[3])
@@ -234,7 +243,7 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
             # 2) vencimentos -> Loss
             for b in [b for b in st["batches"] if b[3] <= d and b[2] > 0]:
                 t = days[d] + pd.Timedelta(hours=6, minutes=int(r_led.integers(0, 60)))
-                movs.append((new_id(), t, b[1], b[0], med_ids[m], "Loss", b[2]))
+                movs.append((new_id(), t, b[1], b[0], med_ids[m], "Loss", b[2], None))
                 close_stock(b[1], t)
                 b[2] = 0
             st["batches"] = [b for b in st["batches"] if b[2] > 0]
@@ -246,7 +255,7 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
                         break
                     take = min(b[2], need)
                     t = ts(d, 8, 17)
-                    movs.append((new_id(), t, b[1], b[0], med_ids[m], "Exit", take))
+                    movs.append((new_id(), t, b[1], b[0], med_ids[m], "Exit", take, None))
                     b[2] -= take
                     need -= take
                     stocks[b[1]]["qty"] = b[2]
@@ -288,8 +297,9 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
                     if qty < 3 or not cands:
                         continue
                     b = cands[0]
-                    t = ts(d, 9, 16)
-                    movs.append((new_id(), t, b[1], b[0], med_ids[m], "TransferOut", qty))
+                    t = days[d] + pd.Timedelta(hours=9)
+                    tid = new_id()
+                    movs.append((new_id(), t, b[1], b[0], med_ids[m], "TransferOut", qty, tid))
                     b[2] -= qty
                     stocks[b[1]]["qty"] = b[2]
                     stocks[b[1]]["updated_at"] = t
@@ -303,10 +313,10 @@ def simulate(cfg: MockConfig = MockConfig()) -> MockDataset:
                         stocks[ex[1]]["qty"] = ex[2]
                         stocks[ex[1]]["updated_at"] = t
                     else:
-                        receive(rsi, d, qty, b[3], "TransferIn", batch_id=b[0])
+                        receive(rsi, d, qty, b[3], "TransferIn", batch_id=b[0], transfer_id=tid, when=t)
 
     # ---------------------------------------------------------------- empacota
-    mov_df = pd.DataFrame(movs, columns=["movement_id", "created_at", "stock_id", "batch_id", "medicine_id", "type", "quantity"])
+    mov_df = pd.DataFrame(movs, columns=["movement_id", "created_at", "stock_id", "batch_id", "medicine_id", "type", "quantity", "transfer_id"])
     mov_df = mov_df.sort_values("created_at", kind="stable").reset_index(drop=True)
     stk_df = pd.DataFrame(stocks.values()).rename(columns={"qty": "quantity"})
     bat_df = pd.DataFrame(batches.values())

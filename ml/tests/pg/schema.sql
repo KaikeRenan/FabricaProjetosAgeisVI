@@ -23,6 +23,8 @@ CREATE TABLE stocks (
 CREATE TABLE stock_movements (
   id uuid PRIMARY KEY, stock_id uuid NOT NULL REFERENCES stocks(id), batch_id uuid NOT NULL REFERENCES batches(id),
   medicine_id uuid NOT NULL REFERENCES medicines(id), type text NOT NULL, quantity integer NOT NULL,
+  occurred_at timestamptz NOT NULL, transfer_id uuid,
   created_at timestamptz NOT NULL, updated_at timestamptz NOT NULL, removed_at timestamptz);
+CREATE INDEX ix_mov_transfer ON stock_movements(transfer_id);
 CREATE INDEX ix_stocks_batch ON stocks(batch_id);
 CREATE INDEX ix_mov_stock ON stock_movements(stock_id);

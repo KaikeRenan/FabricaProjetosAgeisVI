@@ -9,10 +9,17 @@ namespace mvp.Services
     public class ExpirationAlertService : IExpirationAlertService
     {
         private readonly IExpirationAlertRepository _expirationAlertRepository;
+        private readonly IMedicineRepository _medicineRepository;
+        private readonly IBatchRepository _batchRepository;
 
-        public ExpirationAlertService(IExpirationAlertRepository expirationAlertRepository)
+        public ExpirationAlertService(
+            IExpirationAlertRepository expirationAlertRepository,
+            IMedicineRepository medicineRepository,
+            IBatchRepository batchRepository)
         {
             _expirationAlertRepository = expirationAlertRepository;
+            _medicineRepository = medicineRepository;
+            _batchRepository = batchRepository;
         }
 
         private ExpirationAlertResponseDTO Response(ExpirationAlert expirationAlert)
@@ -46,6 +53,8 @@ namespace mvp.Services
 
         public async Task<ExpirationAlertResponseDTO> CreateAsync(ExpirationAlertCreateDTO dto)
         {
+            await EnsureReferencesAsync(dto.MedicineId, dto.BatchId);
+
             var expirationAlert = new ExpirationAlert(
                 dto.MedicineId,
                 dto.BatchId,
@@ -59,6 +68,8 @@ namespace mvp.Services
 
         public async Task<ExpirationAlertResponseDTO> UpdateAsync(Guid Id, ExpirationAlertUpdateDTO dto)
         {
+            await EnsureReferencesAsync(dto.MedicineId, dto.BatchId);
+
             var expirationAlert = await _expirationAlertRepository.GetByIdAsync(Id);
 
             if (expirationAlert == null)
@@ -104,6 +115,15 @@ namespace mvp.Services
                 throw new ArgumentException("daysAhead deve estar entre 0 e 365.", nameof(daysAhead));
 
             return await _expirationAlertRepository.GenerateAsync(daysAhead, autoResolve, ct);
+        }
+
+        private async Task EnsureReferencesAsync(Guid medicineId, Guid batchId)
+        {
+            if (await _medicineRepository.GetByIdAsync(medicineId) is null)
+                throw new MedicineNotFoundException();
+
+            if (await _batchRepository.GetByIdAsync(batchId) is null)
+                throw new BatchNotFoundException();
         }
     }
 }
